@@ -1,0 +1,9 @@
+langgraph
+langchain-google-genai
+langchain-mcp-adapters
+mcp[cli]
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
+python-dotenv
+gradio
