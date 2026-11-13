@@ -1,6 +1,6 @@
 .env
+.venv/
 credentials.json
 token.json
 *.db
-.env/
 __pycache__/
