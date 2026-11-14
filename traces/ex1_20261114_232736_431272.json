@@ -1,0 +1,51 @@
+{
+  "demande": "Avez-vous un appartement à Yoff pour 300 000 F par mois ?",
+  "reponse": "Je suis désolé, mais nous n'avons actuellement aucun appartement disponible à Yoff pour un loyer de 300 000 F CFA.\n\nSouhaitez-vous que nous élargissions la recherche à d'autres quartiers ou que nous revoyions vos critères de budget ?",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 1631,
+  "duree_s": 1.44,
+  "modele": "gemini-3.1-flash-lite",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Avez-vous un appartement à Yoff pour 300 000 F par mois ?"
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "quartier": "Yoff",
+        "type_bien": "Appartement",
+        "loyer_max": 300000
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 725,
+      "output_tokens": 43,
+      "total_tokens": 768,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\"nombre\": 0, \"biens\": [], \"message\": \"Aucun bien ne correspond aux critères de recherche.\"}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Je suis désolé, mais nous n'avons actuellement aucun appartement disponible à Yoff pour un loyer de 300 000 F CFA.\n\nSouhaitez-vous que nous élargissions la recherche à d'autres quartiers ou que nous revoyions vos critères de budget ?"
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 802,
+      "output_tokens": 61,
+      "total_tokens": 863,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "demande": "Je voudrais louer une villa aux Almadies.",
+  "reponse": "Nous avons trouvé 2 villas disponibles aux Almadies :\n\n*   **SK-014** : Villa, quartier Almadies, 5 pièces, 1 200 000 F CFA par mois, située Zone Almadies, Lot 47, Dakar.\n*   **SK-013** : Villa, quartier Almadies, 6 pièces, 1 500 000 F CFA par mois, située Route des Almadies, Lot 22, Dakar.\n\nSouhaitez-vous plus de détails sur l'un de ces biens ?",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 1786,
+  "duree_s": 1.45,
+  "modele": "gemini-3.1-flash-lite",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Je voudrais louer une villa aux Almadies."
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "quartier": "Almadies",
+        "type_bien": "Villa"
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 715,
+      "output_tokens": 30,
+      "total_tokens": 745,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\"nombre\": 2, \"biens\": [{\"id\": \"SK-014\", \"type\": \"Villa\", \"quartier\": \"Almadies\", \"loyer\": 1200000, \"pieces\": 5, \"adresse\": \"Zone Almadies, Lot 47, Dakar\", \"disponible\": 1, \"description\": \"Villa avec jardin, 4 chambres\"}, {\"id\": \"SK-013\", \"type\": \"Villa\", \"quartier\": \"Almadies\", \"loyer\": 1500000, \"pieces\": 6, \"adresse\": \"Route des Almadies, Lot 22, Dakar\", \"disponible\": 1, \"description\": \"Villa avec piscine, 5 chambres\"}]}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Nous avons trouvé 2 villas disponibles aux Almadies :\n\n*   **SK-014** : Villa, quartier Almadies, 5 pièces, 1 200 000 F CFA par mois, située Zone Almadies, Lot 47, Dakar.\n*   **SK-013** : Villa, quartier Almadies, 6 pièces, 1 500 000 F CFA par mois, située Route des Almadies, Lot 22, Dakar.\n\nSouhaitez-vous plus de détails sur l'un de ces biens ?"
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 911,
+      "output_tokens": 130,
+      "total_tokens": 1041,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}
