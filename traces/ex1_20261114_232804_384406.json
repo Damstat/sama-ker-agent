@@ -1,0 +1,50 @@
+{
+  "demande": "Je suis étudiant, je cherche un studio au Point E.",
+  "reponse": "Bonjour. J'ai trouvé un studio disponible au Point E qui pourrait vous convenir :\n\n*   **Identifiant :** SK-011\n*   **Type :** Studio\n*   **Quartier :** Point E\n*   **Nombre de pièces :** 1\n*   **Loyer mensuel :** 160 000 F CFA\n*   **Adresse :** Rue PE-14, Point E, Dakar\n\nSouhaitez-vous plus d'informations sur ce bien ?",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 1689,
+  "duree_s": 2.49,
+  "modele": "gemini-3.1-flash-lite",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Je suis étudiant, je cherche un studio au Point E."
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "quartier": "Point E",
+        "type_bien": "Studio"
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 715,
+      "output_tokens": 29,
+      "total_tokens": 744,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\"nombre\": 1, \"biens\": [{\"id\": \"SK-011\", \"type\": \"Studio\", \"quartier\": \"Point E\", \"loyer\": 160000, \"pieces\": 1, \"adresse\": \"Rue PE-14, Point E, Dakar\", \"disponible\": 1, \"description\": \"Studio meublé, idéal étudiant\"}]}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Bonjour. J'ai trouvé un studio disponible au Point E qui pourrait vous convenir :\n\n*   **Identifiant :** SK-011\n*   **Type :** Studio\n*   **Quartier :** Point E\n*   **Nombre de pièces :** 1\n*   **Loyer mensuel :** 160 000 F CFA\n*   **Adresse :** Rue PE-14, Point E, Dakar\n\nSouhaitez-vous plus d'informations sur ce bien ?"
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 833,
+      "output_tokens": 112,
+      "total_tokens": 945,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}

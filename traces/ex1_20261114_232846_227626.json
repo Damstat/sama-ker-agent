@@ -1,0 +1,50 @@
+{
+  "demande": "Quelque chose a sacre coeur a moins de 250000",
+  "reponse": "Voici le bien disponible à Sacré-Cœur correspondant à votre recherche :\n\n*   **Identifiant :** SK-009\n*   **Type :** Appartement\n*   **Quartier :** Sacré-Cœur\n*   **Nombre de pièces :** 2\n*   **Loyer mensuel :** 220 000 F CFA\n*   **Adresse :** Sacré-Cœur 2, Villa 8210, Dakar\n\nSouhaitez-vous plus d'informations sur ce logement ?",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 1728,
+  "duree_s": 1.51,
+  "modele": "gemini-3.1-flash-lite",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Quelque chose a sacre coeur a moins de 250000"
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "loyer_max": 250000,
+        "quartier": "Sacré-Cœur"
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 720,
+      "output_tokens": 36,
+      "total_tokens": 756,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\"nombre\": 1, \"biens\": [{\"id\": \"SK-009\", \"type\": \"Appartement\", \"quartier\": \"Sacré-Cœur\", \"loyer\": 220000, \"pieces\": 2, \"adresse\": \"Sacré-Cœur 2, Villa 8210, Dakar\", \"disponible\": 1, \"description\": \"F2 avec balcon\"}]}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Voici le bien disponible à Sacré-Cœur correspondant à votre recherche :\n\n*   **Identifiant :** SK-009\n*   **Type :** Appartement\n*   **Quartier :** Sacré-Cœur\n*   **Nombre de pièces :** 2\n*   **Loyer mensuel :** 220 000 F CFA\n*   **Adresse :** Sacré-Cœur 2, Villa 8210, Dakar\n\nSouhaitez-vous plus d'informations sur ce logement ?"
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 853,
+      "output_tokens": 119,
+      "total_tokens": 972,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}
