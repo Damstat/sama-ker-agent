@@ -1,0 +1,62 @@
+[
+  {
+    "id": "D01",
+    "demande": "Bonjour, je cherche un F3 à Mermoz à moins de 400 000 F.",
+    "biens_attendus": ["SK-001", "SK-004"],
+    "piege": "SK-002 trop cher (450 000 F), SK-005 déjà loué"
+  },
+  {
+    "id": "D02",
+    "demande": "Avez-vous un appartement à Yoff pour 300 000 F par mois ?",
+    "biens_attendus": [],
+    "piege": "Aucun bien à Yoff : l'agent doit le dire clairement"
+  },
+  {
+    "id": "D03",
+    "demande": "Je voudrais louer une villa aux Almadies.",
+    "biens_attendus": ["SK-014", "SK-013"],
+    "piege": "Ne pas proposer l'appartement SK-015"
+  },
+  {
+    "id": "D04",
+    "demande": "Je suis étudiant, je cherche un studio au Point E.",
+    "biens_attendus": ["SK-011"],
+    "piege": "SK-003 est déjà loué"
+  },
+  {
+    "id": "D05",
+    "demande": "Une villa à moins de 500 000 F, c'est possible ?",
+    "biens_attendus": [],
+    "piege": "Aucune villa sous 500 000 F : ne rien inventer"
+  },
+  {
+    "id": "D06",
+    "demande": "Je cherche une chambre, 80 000 F maximum.",
+    "biens_attendus": ["SK-027", "SK-018", "SK-024"],
+    "piege": "SK-024 est pile à 80 000 F et doit être inclus"
+  },
+  {
+    "id": "D07",
+    "demande": "Quelque chose a sacre coeur a moins de 250000",
+    "biens_attendus": ["SK-009"],
+    "piege": "Sans accents ni espaces dans le prix"
+  },
+  {
+    "id": "D08",
+    "demande": "Un F3 au Point E, budget 400 000 F maximum.",
+    "biens_attendus": ["SK-012"],
+    "piege": "SK-012 est pile à 400 000 F"
+  },
+  {
+    "id": "D09",
+    "demande": "Je veux au moins 3 pièces à Ouakam pour moins de 200 000 F.",
+    "biens_attendus": [],
+    "piege": "SK-016 existe mais coûte 250 000 F"
+  },
+  {
+    "id": "D10",
+    "demande": "Un logement au Plateau à moins de 400 000 F svp.",
+    "biens_attendus": ["SK-021"],
+    "piege": "SK-020 déjà loué, SK-019 trop cher"
+  }
+]
