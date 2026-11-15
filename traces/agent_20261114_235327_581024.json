@@ -1,0 +1,51 @@
+{
+  "demande": "Je suis étudiant, je cherche un studio au Point E.",
+  "reponse": "Bonjour. Pour votre recherche de studio au Point E, voici le bien disponible dans notre catalogue :\n\n*   **Identifiant :** SK-011\n*   **Type :** Studio\n*   **Quartier :** Point E\n*   **Nombre de pièces :** 1\n*   **Loyer mensuel :** 160 000 F CFA\n*   **Adresse :** Rue PE-14, Point E, Dakar\n\nSouhaitez-vous plus d'informations sur ce bien ou souhaitez-vous planifier une visite ? Pour rappel, nos visites ont lieu du lundi au samedi, de 9 h à 18 h.",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 2572,
+  "duree_s": 1.58,
+  "modele": "gemini-3.1-flash-lite",
+  "transport_mcp": "http",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Je suis étudiant, je cherche un studio au Point E."
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "quartier": "Point E",
+        "type_bien": "Studio"
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1094,
+      "output_tokens": 29,
+      "total_tokens": 1123,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\n  \"nombre\": 1,\n  \"biens\": [\n    {\n      \"id\": \"SK-011\",\n      \"type\": \"Studio\",\n      \"quartier\": \"Point E\",\n      \"loyer\": 160000,\n      \"pieces\": 1,\n      \"adresse\": \"Rue PE-14, Point E, Dakar\",\n      \"disponible\": 1,\n      \"description\": \"Studio meublé, idéal étudiant\"\n    }\n  ]\n}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Bonjour. Pour votre recherche de studio au Point E, voici le bien disponible dans notre catalogue :\n\n*   **Identifiant :** SK-011\n*   **Type :** Studio\n*   **Quartier :** Point E\n*   **Nombre de pièces :** 1\n*   **Loyer mensuel :** 160 000 F CFA\n*   **Adresse :** Rue PE-14, Point E, Dakar\n\nSouhaitez-vous plus d'informations sur ce bien ou souhaitez-vous planifier une visite ? Pour rappel, nos visites ont lieu du lundi au samedi, de 9 h à 18 h."
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1306,
+      "output_tokens": 143,
+      "total_tokens": 1449,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}

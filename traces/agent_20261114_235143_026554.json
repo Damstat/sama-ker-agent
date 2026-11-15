@@ -1,0 +1,53 @@
+{
+  "demande": "Bonjour, je cherche un F3 à Mermoz à moins de 400 000 F. Vous faites les visites le dimanche ?",
+  "reponse": "Bonjour. Concernant votre recherche, nous avons deux appartements F3 disponibles à Mermoz respectant votre budget :\n\n1. **SK-001** : Appartement, Mermoz, 3 pièces, 350 000 F CFA, situé Rue MZ-45, Mermoz, Dakar.\n2. **SK-004** : Appartement, Mermoz, 3 pièces, 380 000 F CFA, situé Cité Mermoz, Villa 112, Dakar.\n\nPour répondre à votre question, nous ne faisons pas de visites le dimanche. Nos visites ont lieu du lundi au samedi, de 9 h à 18 h.\n\nSouhaitez-vous plus de détails sur l'un de ces biens ou planifier une visite ?",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 2800,
+  "duree_s": 7.99,
+  "modele": "gemini-3.1-flash-lite",
+  "transport_mcp": "stdio",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Bonjour, je cherche un F3 à Mermoz à moins de 400 000 F. Vous faites les visites le dimanche ?"
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "pieces_min": 3,
+        "quartier": "Mermoz",
+        "loyer_max": 400000,
+        "type_bien": "Appartement"
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1113,
+      "output_tokens": 50,
+      "total_tokens": 1163,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\n  \"nombre\": 2,\n  \"biens\": [\n    {\n      \"id\": \"SK-001\",\n      \"type\": \"Appartement\",\n      \"quartier\": \"Mermoz\",\n      \"loyer\": 350000,\n      \"pieces\": 3,\n      \"adresse\": \"Rue MZ-45, Mermoz, Dakar\",\n      \"disponible\": 1,\n      \"description\": \"F3 lumineux, 2 chambres, parking\"\n    },\n    {\n      \"id\": \"SK-004\",\n      \"type\": \"Appartement\",\n      \"quartier\": \"Mermoz\",\n      \"loyer\": 380000,\n      \"pieces\": 3,\n      \"adresse\": \"Cité Mermoz, Villa 112, Dakar\",\n      \"disponible\": 1,\n      \"description\": \"F3 rénové, cuisine équipée, 2 salles de bain\"\n    }\n  ]\n}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Bonjour. Concernant votre recherche, nous avons deux appartements F3 disponibles à Mermoz respectant votre budget :\n\n1. **SK-001** : Appartement, Mermoz, 3 pièces, 350 000 F CFA, situé Rue MZ-45, Mermoz, Dakar.\n2. **SK-004** : Appartement, Mermoz, 3 pièces, 380 000 F CFA, situé Cité Mermoz, Villa 112, Dakar.\n\nPour répondre à votre question, nous ne faisons pas de visites le dimanche. Nos visites ont lieu du lundi au samedi, de 9 h à 18 h.\n\nSouhaitez-vous plus de détails sur l'un de ces biens ou planifier une visite ?"
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1462,
+      "output_tokens": 175,
+      "total_tokens": 1637,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}
