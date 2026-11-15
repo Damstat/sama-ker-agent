@@ -21,7 +21,7 @@ Projet réalisé dans le cadre du programme Data & IA — Orange Digital Center.
             Email client
                  │
                  ▼
-┌──────────────────────────────────┐
+┌──────────────────────────────────┐   MCP (stdio ou HTTP)
 │ Agent (LangGraph + Gemini)       │──► Serveur MCP catalogue (SQLite)
 │ boucle, état, étapes limitées    │──► Google Calendar (créneaux, visites)
 └──────────────────────────────────┘──► Gmail (lecture, brouillons, envoi)
@@ -32,22 +32,35 @@ Projet réalisé dans le cadre du programme Data & IA — Orange Digital Center.
 
 | Brique | Choix |
 |---|---|
-| Modèle | Gemini Flash (palier gratuit Google AI Studio) |
+| Modèle | `gemini-3.1-flash-lite` (palier gratuit Google AI Studio) |
 | Framework d'agent | LangGraph |
 | Catalogue | SQLite (30 biens fictifs) exposé par un serveur MCP (FastMCP) |
 | Agenda / Messagerie | API Google Calendar / API Gmail, sur un compte de test |
 | Validation humaine | Gradio ou ligne de commande |
 
+**Choix du modèle.** `gemini-2.5-flash` n'est plus ouvert aux nouveaux comptes, `gemini-3.8-flash`
+dépassait le délai de réponse et `gemini-3.5-flash` est limité à 20 requêtes par jour sur le
+palier gratuit. `gemini-3.1-flash-lite` obtient 10/10 sur les demandes de test de l'exercice 1
+avec un quota suffisant pour l'évaluation.
+
 ## Organisation du dépôt
 
 ```
 sama-ker-agent/
-├── agent/          # code de l'agent (boucle, outils Calendar et Gmail, validation)
-├── mcp_server/     # serveur MCP du catalogue
-├── data/           # script de création de la base SQLite
-├── eval/           # 15 emails de test, résultats attendus, script d'évaluation
-├── traces/         # traces de traitements complets
-├── .env.example    # modèle de configuration (sans secrets)
+├── agent/
+│   ├── agent.py            # boucle LangGraph, client MCP, traces
+│   └── google_auth.py      # connexion OAuth au compte Google de test
+├── mcp_server/
+│   ├── server.py           # serveur MCP : outils + ressource
+│   ├── catalogue.py        # requêtes SQLite du catalogue
+│   └── exemple_client.py   # client de démonstration
+├── data/
+│   └── create_catalogue.py # création de la base (30 biens)
+├── eval/
+│   ├── demandes_ex1.json   # 10 demandes de test et résultats attendus
+│   └── evaluer_ex1.py      # rejoue les demandes et calcule le taux de réussite
+├── traces/                 # traces JSON des traitements
+├── .env.example            # modèle de configuration (sans secrets)
 ├── requirements.txt
 └── README.md
 ```
@@ -58,6 +71,7 @@ sama-ker-agent/
 
 - Python 3.11 ou plus récent
 - Git
+- Node.js (uniquement pour l'inspecteur MCP)
 - Accès au compte Google de test de l'équipe (demander à Adama ou Yaye)
 
 ### 1. Cloner le dépôt
@@ -91,12 +105,196 @@ Remplir le fichier `.env` avec les vraies valeurs, transmises en privé par l'é
 | Variable | Description |
 |---|---|
 | `GOOGLE_API_KEY` | Clé API Gemini (Google AI Studio, compte de test) |
-| `MODEL_NAME` | Nom du modèle, ex. `gemini-2.5-flash` |
+| `MODEL_NAME` | Nom du modèle, par défaut `gemini-3.1-flash-lite` |
+| `MAX_STEPS` | Nombre maximal d'étapes de la boucle de l'agent (défaut 15) |
 | `CALENDAR_ID_CONSEILLER_1..3` | ID des trois agendas des conseillers |
 | `GOOGLE_CREDENTIALS_FILE` | Chemin du fichier OAuth `credentials.json` |
-| `DB_PATH` | Chemin de la base SQLite du catalogue |
+| `DB_PATH` | Chemin de la base SQLite, relatif à la racine du projet |
+| `MCP_TRANSPORT` | `stdio` (défaut) ou `http` |
 | `MCP_SERVER_URL` | Adresse du serveur MCP en mode HTTP |
 
 Placer aussi le fichier `credentials.json` (identifiant OAuth Google) à la racine du projet.
 
 ### 4. Configuration des accès Google
+
+1. Projet Google Cloud créé avec le compte de test, API **Gmail** et **Google Calendar** activées.
+2. Écran de consentement OAuth en mode *Test*, compte de test ajouté comme utilisateur test.
+3. Autorisations demandées (strict nécessaire) :
+   - `gmail.modify` : lecture, brouillons, envoi, libellés
+   - `calendar.events` : création, déplacement, annulation de visites
+4. Générer le jeton : `python agent/google_auth.py`. Une fenêtre de connexion s'ouvre et crée `token.json`.
+
+> ⚠️ En mode *Test*, `token.json` expire après 7 jours : le supprimer puis se reconnecter.
+
+## Lancement
+
+```powershell
+# 1. Créer le catalogue (30 biens)
+python data/create_catalogue.py
+
+# 2. Interroger l'agent (il lance lui-même le serveur MCP en stdio)
+python -m agent.agent "Je cherche un F3 à Mermoz à moins de 400 000 F"
+
+# 3. Rejouer les 10 demandes de test
+python -m eval.evaluer_ex1
+```
+
+Pour passer l'agent en HTTP : lancer le serveur dans un premier terminal
+(`python -m mcp_server.server --http`), puis dans un second terminal :
+
+```powershell
+$env:MCP_TRANSPORT="http"
+python -m agent.agent "Je cherche un studio au Point E"
+```
+
+## Serveur MCP du catalogue
+
+Serveur `sama-ker-catalogue`, écrit avec FastMCP (SDK MCP Python). Il expose deux outils et
+une ressource. L'agent n'accède jamais directement à la base : il passe par ce serveur.
+
+### Démarrer le serveur
+
+```powershell
+python data/create_catalogue.py                               # une fois, crée la base
+python -m mcp_server.server                                   # transport stdio
+python -m mcp_server.server --http                            # HTTP : http://127.0.0.1:8000/mcp
+python -m mcp_server.server --http --host 0.0.0.0 --port 9000 # accessible sur le réseau
+```
+
+### Outil `rechercher_biens`
+
+Recherche les biens **disponibles** correspondant aux critères. Tous les arguments sont
+facultatifs. Les résultats sont triés par loyer croissant, 5 au maximum.
+
+| Argument | Type | Description |
+|---|---|---|
+| `quartier` | string | Quartier de Dakar, ex. `"Mermoz"`. Insensible à la casse, aux accents et aux tirets (`"sacre coeur"` trouve `"Sacré-Cœur"`) |
+| `type_bien` | string | `"Appartement"`, `"Studio"`, `"Villa"` ou `"Chambre"` |
+| `loyer_max` | integer | Loyer mensuel maximum en F CFA, bornes incluses, ex. `400000` |
+| `pieces_min` | integer | Nombre minimum de pièces. Un F3 correspond à `3` |
+
+Exemple d'appel :
+
+```json
+{"quartier": "Mermoz", "type_bien": "Appartement", "pieces_min": 3, "loyer_max": 400000}
+```
+
+Réponse :
+
+```json
+{
+  "nombre": 2,
+  "biens": [
+    {"id": "SK-001", "type": "Appartement", "quartier": "Mermoz", "loyer": 350000, "pieces": 3,
+     "adresse": "Rue MZ-45, Mermoz, Dakar", "disponible": 1, "description": "F3 lumineux, 2 chambres, parking"},
+    {"id": "SK-004", "type": "Appartement", "quartier": "Mermoz", "loyer": 380000, "pieces": 3,
+     "adresse": "Cité Mermoz, Villa 112, Dakar", "disponible": 1, "description": "F3 rénové, cuisine équipée, 2 salles de bain"}
+  ]
+}
+```
+
+Aucun résultat :
+
+```json
+{"nombre": 0, "biens": [], "message": "Aucun bien ne correspond aux critères de recherche."}
+```
+
+Argument invalide :
+
+```json
+{"erreur": "type_bien inconnu : F3", "conseil": "Utiliser l'un de : Appartement, Studio, Villa, Chambre."}
+```
+
+### Outil `detail_bien`
+
+Renvoie la fiche complète d'un bien.
+
+| Argument | Type | Description |
+|---|---|---|
+| `id_bien` | string | Identifiant du bien, ex. `"SK-001"` (obligatoire) |
+
+```json
+{"id_bien": "SK-999"}
+```
+
+```json
+{"erreur": "Bien SK-999 introuvable dans le catalogue.", "conseil": "Utiliser rechercher_biens pour obtenir des identifiants valides."}
+```
+
+### Ressource `agence://infos`
+
+Texte Markdown qui décrit l'agence : horaires de visite (lundi au samedi, 9 h à 18 h,
+visites de 45 minutes), zones couvertes et conditions de location (caution, avance, frais).
+
+### Brancher son propre agent
+
+**Vérification rapide**, avec le client de démonstration :
+
+```powershell
+python -m mcp_server.exemple_client                                  # stdio
+python -m mcp_server.exemple_client --url http://127.0.0.1:8000/mcp  # HTTP
+```
+
+**Avec n'importe quel client MCP** (Claude Desktop, Cursor, inspecteur…), en stdio, lancé
+depuis la racine du dépôt cloné :
+
+```json
+{
+  "mcpServers": {
+    "sama-ker-catalogue": {
+      "command": "python",
+      "args": ["-m", "mcp_server.server"],
+      "cwd": "C:/chemin/vers/sama-ker-agent"
+    }
+  }
+}
+```
+
+ou en HTTP : `http://<adresse>:8000/mcp` (transport *streamable HTTP*).
+
+**Avec LangChain / LangGraph** (`langchain-mcp-adapters`) :
+
+```python
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
+client = MultiServerMCPClient({
+    "catalogue": {"transport": "streamable_http", "url": "http://127.0.0.1:8000/mcp"}
+})
+outils = await client.get_tools()   # [rechercher_biens, detail_bien]
+```
+
+### Vérifier avec l'inspecteur MCP
+
+L'inspecteur nécessite Node.js (`winget install OpenJS.NodeJS.LTS`).
+
+```powershell
+# Transport stdio
+npx @modelcontextprotocol/inspector python -m mcp_server.server
+
+# Transport HTTP : lancer le serveur avec --http, puis
+npx @modelcontextprotocol/inspector
+# dans l'interface : Transport = Streamable HTTP, URL = http://127.0.0.1:8000/mcp
+```
+
+## Évaluation
+
+| Exercice | Commande | Résultat |
+|---|---|---|
+| 1 (outils locaux dans l'agent) | `python -m eval.evaluer_ex1` (version de l'exercice 1) | 10/10 |
+| 2 (serveur MCP, stdio) | `python -m eval.evaluer_ex1` | 10/10 |
+| 2 (serveur MCP, HTTP) | `$env:MCP_TRANSPORT="http"; python -m eval.evaluer_ex1` | 10/10 |
+
+> Section complétée à l'exercice 6 : tableau de résultats avant / après correction.
+
+## Sécurité
+
+- Aucun identifiant réel dans le dépôt : `.env`, `credentials.json` et `token.json` sont ignorés par Git.
+- Seul un compte Google de test est connecté à l'agent.
+- Les requêtes SQL du serveur MCP sont paramétrées (pas d'injection SQL possible).
+- Le contenu des emails est traité comme une donnée : aucune instruction lue dans un message ne modifie le comportement de l'agent.
+
+## Règles de travail
+
+- Une branche par tâche : `git checkout -b ex2-mcp-server`
+- Pull Request vers `master`, relue par un autre membre avant fusion.
+- Avant chaque commit : `git status` ne doit afficher ni `.env`, ni `credentials.json`, ni `token.json`.

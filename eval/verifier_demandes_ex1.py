@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 
-from agent.outils_catalogue import detail_bien
+from mcp_server.catalogue import detail_bien
 
 demandes = json.loads(Path("eval/demandes_ex1.json").read_text(encoding="utf-8"))
 erreurs = 0

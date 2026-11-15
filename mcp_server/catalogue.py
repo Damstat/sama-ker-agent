@@ -1,13 +1,17 @@
-"""Outils métier du catalogue (exercice 1). Déplacés dans le serveur MCP à l'exercice 2."""
+"""Logique métier du catalogue : requêtes SQLite utilisées par le serveur MCP."""
 import os
 import sqlite3
 import unicodedata
+from pathlib import Path
 from typing import Optional
 
 from dotenv import load_dotenv
 
-load_dotenv()
-DB_PATH = os.getenv("DB_PATH", "data/catalogue.db")
+RACINE = Path(__file__).resolve().parents[1]
+load_dotenv(RACINE / ".env")
+# Un chemin relatif est résolu depuis la racine du projet : le serveur fonctionne
+# quel que soit le dossier depuis lequel un client MCP le lance.
+DB_PATH = str(RACINE / os.getenv("DB_PATH", "data/catalogue.db"))
 
 TYPES_VALIDES = ["Appartement", "Studio", "Villa", "Chambre"]
 

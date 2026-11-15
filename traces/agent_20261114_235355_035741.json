@@ -1,0 +1,51 @@
+{
+  "demande": "Je cherche une chambre, 80 000 F maximum.",
+  "reponse": "Bonjour. Voici les chambres disponibles dans votre budget de 80 000 F CFA maximum :\n\n*   **SK-027** : Chambre, Parcelles Assainies, 1 pièce, 65 000 F CFA/mois, Unité 10, Villa 47, Parcelles Assainies, Dakar.\n*   **SK-018** : Chambre, Ouakam, 1 pièce, 75 000 F CFA/mois, Rue OK-21, Ouakam, Dakar.\n*   **SK-024** : Chambre, Liberté 6, 1 pièce, 80 000 F CFA/mois, Liberté 6, Villa 6512, Dakar.\n\nSouhaitez-vous plus d'informations sur l'un de ces biens ou organiser une visite ? Pour rappel, nos visites ont lieu du lundi au samedi, de 9 h à 18 h.",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 2858,
+  "duree_s": 1.7,
+  "modele": "gemini-3.1-flash-lite",
+  "transport_mcp": "http",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Je cherche une chambre, 80 000 F maximum."
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "type_bien": "Chambre",
+        "loyer_max": 80000
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1097,
+      "output_tokens": 33,
+      "total_tokens": 1130,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\n  \"nombre\": 3,\n  \"biens\": [\n    {\n      \"id\": \"SK-027\",\n      \"type\": \"Chambre\",\n      \"quartier\": \"Parcelles Assainies\",\n      \"loyer\": 65000,\n      \"pieces\": 1,\n      \"adresse\": \"Unité 10, Villa 47, Parcelles Assainies, Dakar\",\n      \"disponible\": 1,\n      \"description\": \"Chambre simple\"\n    },\n    {\n      \"id\": \"SK-018\",\n      \"type\": \"Chambre\",\n      \"quartier\": \"Ouakam\",\n      \"loyer\": 75000,\n      \"pieces\": 1,\n      \"adresse\": \"Rue OK-21, Ouakam, Dakar\",\n      \"disponible\": 1,\n      \"description\": \"Chambre avec salle de bain\"\n    },\n    {\n      \"id\": \"SK-024\",\n      \"type\": \"Chambre\",\n      \"quartier\": \"Liberté 6\",\n      \"loyer\": 80000,\n      \"pieces\": 1,\n      \"adresse\": \"Liberté 6, Villa 6512, Dakar\",\n      \"disponible\": 1,\n      \"description\": \"Chambre meublée\"\n    }\n  ]\n}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Bonjour. Voici les chambres disponibles dans votre budget de 80 000 F CFA maximum :\n\n*   **SK-027** : Chambre, Parcelles Assainies, 1 pièce, 65 000 F CFA/mois, Unité 10, Villa 47, Parcelles Assainies, Dakar.\n*   **SK-018** : Chambre, Ouakam, 1 pièce, 75 000 F CFA/mois, Rue OK-21, Ouakam, Dakar.\n*   **SK-024** : Chambre, Liberté 6, 1 pièce, 80 000 F CFA/mois, Liberté 6, Villa 6512, Dakar.\n\nSouhaitez-vous plus d'informations sur l'un de ces biens ou organiser une visite ? Pour rappel, nos visites ont lieu du lundi au samedi, de 9 h à 18 h."
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1518,
+      "output_tokens": 210,
+      "total_tokens": 1728,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}
