@@ -13,7 +13,7 @@ Projet réalisé dans le cadre du programme Data & IA — Orange Digital Center.
 |---|---|
 | Adama Sarr | Boucle de l'agent, pipeline complet, validation humaine |
 | Sine Ndoye Seck | Catalogue SQLite, serveur MCP, script d'évaluation |
-| Yaye Aminata Ndiaye | Accès Google (OAuth), Google Calendar, Gmail |
+| Aminatou Binetou Wahab Ndiaye | Accès Google (OAuth), Google Calendar, Gmail |
 
 ## Architecture
 
