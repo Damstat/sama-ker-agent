@@ -5,3 +5,4 @@ token.json
 *.db
 __pycache__/
 
+traces/email_*.json
