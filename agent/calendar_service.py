@@ -3,12 +3,13 @@
 
 import os
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from googleapiclient.discovery import build
 
 from agent.google_auth import get_credentials
 
+DUREE_VISITE = 45
 TIMEZONE = ZoneInfo("Africa/Dakar")
 
 def get_calendar_service():
@@ -70,3 +71,78 @@ def verifier_disponibilite(
     ).execute()
 
     return len(evenements.get("items", [])) == 0
+
+
+
+def creer_rendez_vous(
+    conseiller_id: int,
+    nom_client: str,
+    telephone: str,
+    adresse: str,
+    debut: datetime
+) -> dict:
+    """Crée un rendez-vous de visite immobilière dans Google Calendar."""
+
+    if debut.tzinfo is None:
+        raise ValueError("La date de début doit contenir un fuseau horaire.")
+
+    debut = debut.astimezone(TIMEZONE)
+
+    # Calculer automatiquement la fin de la visite
+    fin = debut + timedelta(minutes=DUREE_VISITE)
+
+    # Vérifier que la visite ne tombe pas un dimanche
+    if debut.weekday() == 6:
+        raise ValueError("Les visites ne sont pas autorisées le dimanche.")
+
+    # Vérifier les horaires de l'agence : 9 h à 18 h
+    if debut.hour < 9 or fin.hour > 18 or (
+        fin.hour == 18 and fin.minute > 0
+    ):
+        raise ValueError("Les visites sont possibles entre 9 h et 18 h.")
+
+    # Vérifier la disponibilité du conseiller
+    disponible = verifier_disponibilite(
+        conseiller_id,
+        debut,
+        fin
+    )
+
+    if not disponible:
+        raise ValueError("Ce créneau est déjà occupé.")
+
+    # Récupérer le service et l'agenda du conseiller
+    calendar = get_calendar_service()
+    calendar_id = get_calendar_id(conseiller_id)
+
+    # Préparer les informations du rendez-vous
+    evenement = {
+        "summary": f"Visite immobilière - {nom_client}",
+        "description": (
+            f"Client : {nom_client}\n"
+            f"Téléphone : {telephone}\n"
+            f"Adresse du bien : {adresse}"
+        ),
+        "start": {
+            "dateTime": debut.isoformat(),
+            "timeZone": "Africa/Dakar"
+        },
+        "end": {
+            "dateTime": fin.isoformat(),
+            "timeZone": "Africa/Dakar"
+        }
+    }
+
+    # Enregistrer le rendez-vous dans Google Calendar
+    resultat = calendar.events().insert(
+        calendarId=calendar_id,
+        body=evenement
+    ).execute()
+
+    return {
+        "id": resultat["id"],
+        "lien": resultat.get("htmlLink"),
+        "debut": debut.isoformat(),
+        "fin": fin.isoformat(),
+        "message": "Rendez-vous créé avec succès."
+    }
