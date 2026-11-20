@@ -20,7 +20,8 @@ from mcp.server.fastmcp import FastMCP
 from mcp_server import catalogue
 from agent.calendar_service import (
     verifier_disponibilite as verifier_disponibilite_calendar,
-    creer_rendez_vous as creer_rendez_vous_calendar
+    creer_rendez_vous as creer_rendez_vous_calendar,
+    annuler_rendez_vous as annuler_rendez_vous_calendar
 )
 
 mcp = FastMCP("sama-ker-catalogue", log_level="WARNING")
@@ -96,6 +97,30 @@ def verifier_disponibilite(
 
     except ValueError as erreur:
         return {"erreur": str(erreur)}
+
+
+@mcp.tool()
+def annuler_rendez_vous(
+    conseiller_id: int,
+    event_id: str
+) -> dict:
+    """Annule un rendez-vous dans Google Calendar.
+
+    Args:
+        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
+        event_id: Identifiant Google Calendar du rendez-vous à annuler.
+    """
+    try:
+        resultat = annuler_rendez_vous_calendar(
+            conseiller_id=conseiller_id,
+            event_id=event_id
+        )
+
+        return resultat
+
+    except ValueError as erreur:
+        return {"erreur": str(erreur)}
+
 
 @mcp.tool()
 def creer_rendez_vous(
