@@ -20,6 +20,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp_server import catalogue
 from agent.calendar_service import (
     verifier_disponibilite as verifier_disponibilite_calendar,
+    lister_creneaux_libres as lister_creneaux_libres_calendar,
     creer_rendez_vous as creer_rendez_vous_calendar,
     annuler_rendez_vous as annuler_rendez_vous_calendar
 )
@@ -98,6 +99,37 @@ def verifier_disponibilite(
     except ValueError as erreur:
         return {"erreur": str(erreur)}
 
+
+@mcp.tool()
+def lister_creneaux_libres(
+    conseiller_id: int,
+    debut_periode: str,
+    fin_periode: str,
+    nombre: int = 3
+) -> dict:
+    """Recherche les créneaux libres d'un conseiller sur une période.
+
+    Args:
+        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
+        debut_periode: Début de la période au format ISO 8601 avec fuseau.
+        fin_periode: Fin de la période au format ISO 8601 avec fuseau.
+        nombre: Nombre maximum de créneaux à proposer (3 par défaut).
+    """
+    try:
+        debut_datetime = datetime.fromisoformat(debut_periode)
+        fin_datetime = datetime.fromisoformat(fin_periode)
+
+        resultat = lister_creneaux_libres_calendar(
+            conseiller_id=conseiller_id,
+            debut_periode=debut_datetime,
+            fin_periode=fin_datetime,
+            nombre=nombre
+        )
+
+        return resultat
+
+    except ValueError as erreur:
+        return {"erreur": str(erreur)}
 
 @mcp.tool()
 def annuler_rendez_vous(
