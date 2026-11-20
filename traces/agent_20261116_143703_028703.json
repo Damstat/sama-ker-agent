@@ -1,0 +1,16 @@
+{
+  "demande": "Avez-vous un appartement à Yoff pour 300 000 F par mois ?",
+  "reponse": "Je ne peux pas traiter cette demande pour le moment.",
+  "statut": "erreur : GoogleAPIError : 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+  "appels_outils": 0,
+  "tokens": 0,
+  "duree_s": 79.65,
+  "modele": "gemini-3.1-flash-lite",
+  "transport_mcp": "stdio",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Avez-vous un appartement à Yoff pour 300 000 F par mois ?"
+    }
+  ]
+}

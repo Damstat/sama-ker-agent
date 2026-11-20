@@ -1,0 +1,51 @@
+{
+  "demande": "Une villa à moins de 500 000 F, c'est possible ?",
+  "reponse": "Désolé, nous n'avons actuellement aucune villa disponible à moins de 500 000 F CFA dans notre catalogue.\n\nSouhaitez-vous élargir votre recherche en augmentant votre budget ou en consultant d'autres types de biens, comme des appartements ?",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 2431,
+  "duree_s": 2.32,
+  "modele": "gemini-3.1-flash-lite",
+  "transport_mcp": "stdio",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Une villa à moins de 500 000 F, c'est possible ?"
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "type_bien": "Villa",
+        "loyer_max": 500000
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1102,
+      "output_tokens": 33,
+      "total_tokens": 1135,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\n  \"nombre\": 0,\n  \"biens\": [],\n  \"message\": \"Aucun bien ne correspond aux critères de recherche.\"\n}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Désolé, nous n'avons actuellement aucune villa disponible à moins de 500 000 F CFA dans notre catalogue.\n\nSouhaitez-vous élargir votre recherche en augmentant votre budget ou en consultant d'autres types de biens, comme des appartements ?"
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1237,
+      "output_tokens": 59,
+      "total_tokens": 1296,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}

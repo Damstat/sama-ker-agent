@@ -1,0 +1,53 @@
+{
+  "demande": "Je veux au moins 3 pièces à Ouakam pour moins de 200 000 F.",
+  "reponse": "Désolé, aucun bien ne correspond à vos critères (appartement de 3 pièces ou plus à Ouakam pour moins de 200 000 F CFA) dans notre catalogue actuel.\n\nSouhaitez-vous élargir votre recherche en modifiant votre budget ou en explorant d'autres quartiers couverts par notre agence (comme les Parcelles Assainies ou Sacré-Cœur, par exemple) ?",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 2495,
+  "duree_s": 13.18,
+  "modele": "gemini-3.1-flash-lite",
+  "transport_mcp": "stdio",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Je veux au moins 3 pièces à Ouakam pour moins de 200 000 F."
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "loyer_max": 200000,
+        "pieces_min": 3,
+        "type_bien": "Appartement",
+        "quartier": "Ouakam"
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1105,
+      "output_tokens": 49,
+      "total_tokens": 1154,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\n  \"nombre\": 0,\n  \"biens\": [],\n  \"message\": \"Aucun bien ne correspond aux critères de recherche.\"\n}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Désolé, aucun bien ne correspond à vos critères (appartement de 3 pièces ou plus à Ouakam pour moins de 200 000 F CFA) dans notre catalogue actuel.\n\nSouhaitez-vous élargir votre recherche en modifiant votre budget ou en explorant d'autres quartiers couverts par notre agence (comme les Parcelles Assainies ou Sacré-Cœur, par exemple) ?"
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1253,
+      "output_tokens": 88,
+      "total_tokens": 1341,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}
