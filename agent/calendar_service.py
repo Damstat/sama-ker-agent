@@ -1,16 +1,20 @@
-
 """Service Google Calendar de l'agence Sama Kër Immobilier."""
 
 import os
-
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+
+from dotenv import load_dotenv
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 from agent.google_auth import get_credentials
 
+
+load_dotenv()
+
 DUREE_VISITE = 45
-TIMEZONE = ZoneInfo("Africa/Dakar")
+TIMEZONE = ZoneInfo(os.getenv("TIMEZONE", "Africa/Dakar"))
 
 def get_calendar_service():
     """Construit et retourne le service Google Calendar."""
@@ -50,18 +54,41 @@ def verifier_disponibilite(
 ) -> bool:
     """Vérifie si un conseiller est disponible sur un créneau."""
 
+    # Vérifier la présence du fuseau horaire
     if debut.tzinfo is None or fin.tzinfo is None:
         raise ValueError("Les dates doivent contenir un fuseau horaire.")
 
+    # Convertir les dates dans le fuseau horaire de l'agence
     debut = debut.astimezone(TIMEZONE)
     fin = fin.astimezone(TIMEZONE)
 
+    # Vérifier que la fin est après le début
     if fin <= debut:
         raise ValueError("La date de fin doit être après la date de début.")
 
+    # Vérifier que le rendez-vous n'est pas dans le passé
+    maintenant = datetime.now(TIMEZONE)
+
+    if debut < maintenant:
+        raise ValueError("Impossible de réserver un créneau dans le passé.")
+
+    # Vérifier que le rendez-vous ne tombe pas un dimanche
+    if debut.weekday() == 6:
+        raise ValueError("Les visites ne sont pas autorisées le dimanche.")
+
+    # Vérifier les horaires de l'agence : 9 h à 18 h
+    if debut.hour < 9 or fin.hour > 18 or (
+        fin.hour == 18 and fin.minute > 0
+    ):
+        raise ValueError("Les visites sont possibles entre 9 h et 18 h.")
+
+    # Récupérer le service Google Calendar
     calendar = get_calendar_service()
+
+    # Récupérer l'agenda du conseiller
     calendar_id = get_calendar_id(conseiller_id)
 
+    # Rechercher les événements sur le créneau demandé
     evenements = calendar.events().list(
         calendarId=calendar_id,
         timeMin=debut.isoformat(),
@@ -70,8 +97,8 @@ def verifier_disponibilite(
         orderBy="startTime"
     ).execute()
 
+    # Retourner True si aucun événement n'occupe le créneau
     return len(evenements.get("items", [])) == 0
-
 
 
 def creer_rendez_vous(
@@ -83,23 +110,15 @@ def creer_rendez_vous(
 ) -> dict:
     """Crée un rendez-vous de visite immobilière dans Google Calendar."""
 
+    # Vérifier la présence du fuseau horaire
     if debut.tzinfo is None:
         raise ValueError("La date de début doit contenir un fuseau horaire.")
 
+    # Convertir la date dans le fuseau horaire de l'agence
     debut = debut.astimezone(TIMEZONE)
 
-    # Calculer automatiquement la fin de la visite
+    # Calculer automatiquement la fin de la visite (45 minutes)
     fin = debut + timedelta(minutes=DUREE_VISITE)
-
-    # Vérifier que la visite ne tombe pas un dimanche
-    if debut.weekday() == 6:
-        raise ValueError("Les visites ne sont pas autorisées le dimanche.")
-
-    # Vérifier les horaires de l'agence : 9 h à 18 h
-    if debut.hour < 9 or fin.hour > 18 or (
-        fin.hour == 18 and fin.minute > 0
-    ):
-        raise ValueError("Les visites sont possibles entre 9 h et 18 h.")
 
     # Vérifier la disponibilité du conseiller
     disponible = verifier_disponibilite(
@@ -111,8 +130,10 @@ def creer_rendez_vous(
     if not disponible:
         raise ValueError("Ce créneau est déjà occupé.")
 
-    # Récupérer le service et l'agenda du conseiller
+    # Récupérer le service Google Calendar
     calendar = get_calendar_service()
+
+    # Récupérer l'agenda du conseiller
     calendar_id = get_calendar_id(conseiller_id)
 
     # Préparer les informations du rendez-vous
@@ -125,11 +146,11 @@ def creer_rendez_vous(
         ),
         "start": {
             "dateTime": debut.isoformat(),
-            "timeZone": "Africa/Dakar"
+           "timeZone": str(TIMEZONE)
         },
         "end": {
             "dateTime": fin.isoformat(),
-            "timeZone": "Africa/Dakar"
+           "timeZone": str(TIMEZONE)
         }
     }
 
@@ -152,17 +173,30 @@ def creer_rendez_vous(
 def annuler_rendez_vous(conseiller_id: int, event_id: str) -> dict:
     """Annule un rendez-vous dans Google Calendar."""
 
+    # Vérifier que l'identifiant du rendez-vous est fourni
+    if not event_id or not event_id.strip():
+        raise ValueError("L'identifiant du rendez-vous est obligatoire.")
+
     # Récupérer le service Google Calendar
     calendar = get_calendar_service()
 
     # Récupérer l'agenda du conseiller
     calendar_id = get_calendar_id(conseiller_id)
 
-    # Supprimer le rendez-vous de l'agenda
-    calendar.events().delete(
-        calendarId=calendar_id,
-        eventId=event_id
-    ).execute()
+    try:
+        # Supprimer le rendez-vous de l'agenda
+        calendar.events().delete(
+            calendarId=calendar_id,
+            eventId=event_id
+        ).execute()
+
+    except HttpError as erreur:
+        if erreur.resp.status == 404:
+            raise ValueError(
+                "Ce rendez-vous n'existe pas dans l'agenda du conseiller."
+            ) from erreur
+
+        raise
 
     return {
         "event_id": event_id,
