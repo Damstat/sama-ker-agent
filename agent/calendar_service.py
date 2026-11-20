@@ -1,7 +1,7 @@
 """Service Google Calendar de l'agence Sama Kër Immobilier."""
 
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
@@ -99,6 +99,153 @@ def verifier_disponibilite(
 
     # Retourner True si aucun événement n'occupe le créneau
     return len(evenements.get("items", [])) == 0
+
+
+def lister_creneaux_libres(
+    conseiller_id: int,
+    debut_periode: datetime,
+    fin_periode: datetime,
+    nombre: int = 3
+) -> dict:
+    """Liste les premiers créneaux libres d'un conseiller sur une période."""
+
+    # Vérifier que les dates possèdent un fuseau horaire
+    if debut_periode.tzinfo is None or fin_periode.tzinfo is None:
+        raise ValueError("Les dates doivent contenir un fuseau horaire.")
+
+    # Convertir les dates dans le fuseau de l'agence
+    debut_periode = debut_periode.astimezone(TIMEZONE)
+    fin_periode = fin_periode.astimezone(TIMEZONE)
+
+    if fin_periode <= debut_periode:
+        raise ValueError("La fin de période doit être après le début.")
+
+    if nombre < 1:
+        raise ValueError("Le nombre de créneaux doit être supérieur à zéro.")
+
+    # Récupérer le service Google Calendar et l'agenda du conseiller
+    calendar = get_calendar_service()
+    calendar_id = get_calendar_id(conseiller_id)
+
+    # Récupérer tous les événements de la période en une seule requête
+    evenements = calendar.events().list(
+        calendarId=calendar_id,
+        timeMin=debut_periode.isoformat(),
+        timeMax=fin_periode.isoformat(),
+        singleEvents=True,
+        orderBy="startTime"
+    ).execute()
+
+    # Préparer les périodes déjà occupées
+    periodes_occupees = []
+
+    for evenement in evenements.get("items", []):
+
+        # Ignorer les événements annulés ou transparents
+        if evenement.get("status") == "cancelled":
+            continue
+
+        if evenement.get("transparency") == "transparent":
+            continue
+
+        debut_event = evenement["start"]
+        fin_event = evenement["end"]
+
+        # Gérer les événements avec une heure précise
+        if "dateTime" in debut_event:
+            debut_event = datetime.fromisoformat(
+                debut_event["dateTime"].replace("Z", "+00:00")
+            ).astimezone(TIMEZONE)
+
+            fin_event = datetime.fromisoformat(
+                fin_event["dateTime"].replace("Z", "+00:00")
+            ).astimezone(TIMEZONE)
+
+        # Gérer les événements sur une journée entière
+        else:
+            date_debut = datetime.fromisoformat(
+                debut_event["date"]
+            ).date()
+
+            date_fin = datetime.fromisoformat(
+                fin_event["date"]
+            ).date()
+
+            debut_event = datetime.combine(
+                date_debut, time.min, tzinfo=TIMEZONE
+            )
+
+            fin_event = datetime.combine(
+                date_fin, time.min, tzinfo=TIMEZONE
+            )
+
+        periodes_occupees.append((debut_event, fin_event))
+
+    # Rechercher les créneaux disponibles
+    creneaux = []
+    date_actuelle = debut_periode.date()
+    derniere_date = fin_periode.date()
+    maintenant = datetime.now(TIMEZONE)
+
+    while date_actuelle <= derniere_date and len(creneaux) < nombre:
+
+        # Les visites sont interdites le dimanche
+        if date_actuelle.weekday() != 6:
+
+            ouverture = datetime.combine(
+                date_actuelle, time(9, 0), tzinfo=TIMEZONE
+            )
+
+            fermeture = datetime.combine(
+                date_actuelle, time(18, 0), tzinfo=TIMEZONE
+            )
+
+            debut_creneau = ouverture
+
+            # Examiner les départs possibles toutes les 15 minutes
+            while debut_creneau + timedelta(minutes=DUREE_VISITE) <= fermeture:
+
+                fin_creneau = debut_creneau + timedelta(
+                    minutes=DUREE_VISITE
+                )
+
+                # Vérifier que le créneau appartient à la période demandée
+                if (
+                    debut_creneau >= debut_periode
+                    and fin_creneau <= fin_periode
+                    and debut_creneau >= maintenant
+                ):
+
+                    # Vérifier qu'aucun événement ne chevauche le créneau
+                    occupe = any(
+                        debut_creneau < fin_event
+                        and fin_creneau > debut_event
+                        for debut_event, fin_event in periodes_occupees
+                    )
+
+                    if not occupe:
+                        creneaux.append({
+                            "debut": debut_creneau.isoformat(),
+                            "fin": fin_creneau.isoformat()
+                        })
+
+                        if len(creneaux) >= nombre:
+                            break
+
+                debut_creneau += timedelta(minutes=15)
+
+        date_actuelle += timedelta(days=1)
+
+    return {
+        "conseiller_id": conseiller_id,
+        "nombre": len(creneaux),
+        "creneaux": creneaux,
+        "message": (
+            "Créneaux disponibles trouvés."
+            if creneaux
+            else "Aucun créneau disponible sur cette période."
+        )
+    }
 
 
 def creer_rendez_vous(
