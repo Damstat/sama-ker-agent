@@ -12,11 +12,15 @@ Lancement :
 """
 import argparse
 import sqlite3
+from datetime import datetime
 from typing import Optional
 
 from mcp.server.fastmcp import FastMCP
 
 from mcp_server import catalogue
+from agent.calendar_service import (
+    verifier_disponibilite as verifier_disponibilite_calendar
+)
 
 mcp = FastMCP("sama-ker-catalogue", log_level="WARNING")
 
@@ -53,6 +57,44 @@ def detail_bien(id_bien: str) -> dict:
         description), ou {"erreur": ..., "conseil": ...} si l'identifiant n'existe pas.
     """
     return catalogue.detail_bien(id_bien)
+
+@mcp.tool()
+def verifier_disponibilite(
+    conseiller_id: int,
+    debut: str,
+    fin: str
+) -> dict:
+    """Vérifie si un conseiller est disponible sur un créneau.
+
+    Args:
+        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
+        debut: Date et heure de début au format ISO 8601 avec fuseau horaire.
+        fin: Date et heure de fin au format ISO 8601 avec fuseau horaire.
+    """
+    try:
+        debut_datetime = datetime.fromisoformat(debut)
+        fin_datetime = datetime.fromisoformat(fin)
+
+        disponible = verifier_disponibilite_calendar(
+            conseiller_id,
+            debut_datetime,
+            fin_datetime
+        )
+
+        return {
+            "conseiller_id": conseiller_id,
+            "debut": debut_datetime.isoformat(),
+            "fin": fin_datetime.isoformat(),
+            "disponible": disponible,
+            "message": (
+                "Le conseiller est disponible sur ce créneau."
+                if disponible
+                else "Le conseiller n'est pas disponible sur ce créneau."
+            )
+        }
+
+    except ValueError as erreur:
+        return {"erreur": str(erreur)}
 
 
 def _quartiers_couverts() -> str:
