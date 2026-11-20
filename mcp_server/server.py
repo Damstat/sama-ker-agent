@@ -19,7 +19,8 @@ from mcp.server.fastmcp import FastMCP
 
 from mcp_server import catalogue
 from agent.calendar_service import (
-    verifier_disponibilite as verifier_disponibilite_calendar
+    verifier_disponibilite as verifier_disponibilite_calendar,
+    creer_rendez_vous as creer_rendez_vous_calendar
 )
 
 mcp = FastMCP("sama-ker-catalogue", log_level="WARNING")
@@ -96,6 +97,38 @@ def verifier_disponibilite(
     except ValueError as erreur:
         return {"erreur": str(erreur)}
 
+@mcp.tool()
+def creer_rendez_vous(
+    conseiller_id: int,
+    nom_client: str,
+    telephone: str,
+    adresse: str,
+    debut: str
+) -> dict:
+    """Crée un rendez-vous de visite immobilière dans Google Calendar.
+
+    Args:
+        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
+        nom_client: Nom complet du client.
+        telephone: Numéro de téléphone du client.
+        adresse: Adresse du bien immobilier à visiter.
+        debut: Date et heure de début au format ISO 8601 avec fuseau horaire.
+    """
+    try:
+        debut_datetime = datetime.fromisoformat(debut)
+
+        resultat = creer_rendez_vous_calendar(
+            conseiller_id=conseiller_id,
+            nom_client=nom_client,
+            telephone=telephone,
+            adresse=adresse,
+            debut=debut_datetime
+        )
+
+        return resultat
+
+    except ValueError as erreur:
+        return {"erreur": str(erreur)}
 
 def _quartiers_couverts() -> str:
     try:
