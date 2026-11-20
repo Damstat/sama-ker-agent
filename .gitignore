@@ -5,3 +5,6 @@ token.json
 *.db
 __pycache__/
 
+
+# Journaux des executions de l'agent
+traces/
