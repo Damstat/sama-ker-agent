@@ -146,3 +146,25 @@ def creer_rendez_vous(
         "fin": fin.isoformat(),
         "message": "Rendez-vous créé avec succès."
     }
+
+
+
+def annuler_rendez_vous(conseiller_id: int, event_id: str) -> dict:
+    """Annule un rendez-vous dans Google Calendar."""
+
+    # Récupérer le service Google Calendar
+    calendar = get_calendar_service()
+
+    # Récupérer l'agenda du conseiller
+    calendar_id = get_calendar_id(conseiller_id)
+
+    # Supprimer le rendez-vous de l'agenda
+    calendar.events().delete(
+        calendarId=calendar_id,
+        eventId=event_id
+    ).execute()
+
+    return {
+        "event_id": event_id,
+        "message": "Rendez-vous annulé avec succès."
+    }
