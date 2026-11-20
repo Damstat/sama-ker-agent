@@ -12,11 +12,18 @@ Lancement :
 """
 import argparse
 import sqlite3
+from datetime import datetime
 from typing import Optional
 
 from mcp.server.fastmcp import FastMCP
 
 from mcp_server import catalogue
+from agent.calendar_service import (
+    verifier_disponibilite as verifier_disponibilite_calendar,
+    lister_creneaux_libres as lister_creneaux_libres_calendar,
+    creer_rendez_vous as creer_rendez_vous_calendar,
+    annuler_rendez_vous as annuler_rendez_vous_calendar
+)
 
 mcp = FastMCP("sama-ker-catalogue", log_level="WARNING")
 
@@ -54,6 +61,131 @@ def detail_bien(id_bien: str) -> dict:
     """
     return catalogue.detail_bien(id_bien)
 
+@mcp.tool()
+def verifier_disponibilite(
+    conseiller_id: int,
+    debut: str,
+    fin: str
+) -> dict:
+    """Vérifie si un conseiller est disponible sur un créneau.
+
+    Args:
+        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
+        debut: Date et heure de début au format ISO 8601 avec fuseau horaire.
+        fin: Date et heure de fin au format ISO 8601 avec fuseau horaire.
+    """
+    try:
+        debut_datetime = datetime.fromisoformat(debut)
+        fin_datetime = datetime.fromisoformat(fin)
+
+        disponible = verifier_disponibilite_calendar(
+            conseiller_id,
+            debut_datetime,
+            fin_datetime
+        )
+
+        return {
+            "conseiller_id": conseiller_id,
+            "debut": debut_datetime.isoformat(),
+            "fin": fin_datetime.isoformat(),
+            "disponible": disponible,
+            "message": (
+                "Le conseiller est disponible sur ce créneau."
+                if disponible
+                else "Le conseiller n'est pas disponible sur ce créneau."
+            )
+        }
+
+    except ValueError as erreur:
+        return {"erreur": str(erreur)}
+
+
+@mcp.tool()
+def lister_creneaux_libres(
+    conseiller_id: int,
+    debut_periode: str,
+    fin_periode: str,
+    nombre: int = 3
+) -> dict:
+    """Recherche les créneaux libres d'un conseiller sur une période.
+
+    Args:
+        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
+        debut_periode: Début de la période au format ISO 8601 avec fuseau.
+        fin_periode: Fin de la période au format ISO 8601 avec fuseau.
+        nombre: Nombre maximum de créneaux à proposer (3 par défaut).
+    """
+    try:
+        debut_datetime = datetime.fromisoformat(debut_periode)
+        fin_datetime = datetime.fromisoformat(fin_periode)
+
+        resultat = lister_creneaux_libres_calendar(
+            conseiller_id=conseiller_id,
+            debut_periode=debut_datetime,
+            fin_periode=fin_datetime,
+            nombre=nombre
+        )
+
+        return resultat
+
+    except ValueError as erreur:
+        return {"erreur": str(erreur)}
+
+@mcp.tool()
+def annuler_rendez_vous(
+    conseiller_id: int,
+    event_id: str
+) -> dict:
+    """Annule un rendez-vous dans Google Calendar.
+
+    Args:
+        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
+        event_id: Identifiant Google Calendar du rendez-vous à annuler.
+    """
+    try:
+        resultat = annuler_rendez_vous_calendar(
+            conseiller_id=conseiller_id,
+            event_id=event_id
+        )
+
+        return resultat
+
+    except ValueError as erreur:
+        return {"erreur": str(erreur)}
+
+
+@mcp.tool()
+def creer_rendez_vous(
+    conseiller_id: int,
+    nom_client: str,
+    telephone: str,
+    adresse: str,
+    debut: str
+) -> dict:
+    """Crée un rendez-vous de visite immobilière dans Google Calendar.
+
+    Args:
+        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
+        nom_client: Nom complet du client.
+        telephone: Numéro de téléphone du client.
+        adresse: Adresse du bien immobilier à visiter.
+        debut: Date et heure de début au format ISO 8601 avec fuseau horaire.
+    """
+    try:
+        debut_datetime = datetime.fromisoformat(debut)
+
+        resultat = creer_rendez_vous_calendar(
+            conseiller_id=conseiller_id,
+            nom_client=nom_client,
+            telephone=telephone,
+            adresse=adresse,
+            debut=debut_datetime
+        )
+
+        return resultat
+
+    except ValueError as erreur:
+        return {"erreur": str(erreur)}
 
 def _quartiers_couverts() -> str:
     try:

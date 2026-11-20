@@ -1,0 +1,51 @@
+{
+  "demande": "Quelque chose a sacre coeur a moins de 250000",
+  "reponse": "Voici le bien disponible à Sacré-Cœur correspondant à votre budget :\n\n*   **Identifiant :** SK-009\n*   **Type :** Appartement (F2)\n*   **Quartier :** Sacré-Cœur\n*   **Nombre de pièces :** 2\n*   **Loyer mensuel :** 220 000 F CFA\n*   **Adresse :** Sacré-Cœur 2, Villa 8210, Dakar\n\nSouhaitez-vous plus d'informations sur ce logement ou planifier une visite ? Pour rappel, nos visites ont lieu du lundi au samedi, de 9 h à 18 h.",
+  "statut": "ok",
+  "appels_outils": 1,
+  "tokens": 2614,
+  "duree_s": 15.44,
+  "modele": "gemini-3.1-flash-lite",
+  "transport_mcp": "stdio",
+  "trace": [
+    {
+      "etape": "demande_client",
+      "texte": "Quelque chose a sacre coeur a moins de 250000"
+    },
+    {
+      "etape": "appel_outil",
+      "outil": "rechercher_biens",
+      "arguments": {
+        "loyer_max": 250000,
+        "quartier": "Sacré-Cœur"
+      }
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1099,
+      "output_tokens": 36,
+      "total_tokens": 1135,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    },
+    {
+      "etape": "resultat_outil",
+      "outil": "rechercher_biens",
+      "resultat": "{\n  \"nombre\": 1,\n  \"biens\": [\n    {\n      \"id\": \"SK-009\",\n      \"type\": \"Appartement\",\n      \"quartier\": \"Sacré-Cœur\",\n      \"loyer\": 220000,\n      \"pieces\": 2,\n      \"adresse\": \"Sacré-Cœur 2, Villa 8210, Dakar\",\n      \"disponible\": 1,\n      \"description\": \"F2 avec balcon\"\n    }\n  ]\n}"
+    },
+    {
+      "etape": "reponse_agent",
+      "texte": "Voici le bien disponible à Sacré-Cœur correspondant à votre budget :\n\n*   **Identifiant :** SK-009\n*   **Type :** Appartement (F2)\n*   **Quartier :** Sacré-Cœur\n*   **Nombre de pièces :** 2\n*   **Loyer mensuel :** 220 000 F CFA\n*   **Adresse :** Sacré-Cœur 2, Villa 8210, Dakar\n\nSouhaitez-vous plus d'informations sur ce logement ou planifier une visite ? Pour rappel, nos visites ont lieu du lundi au samedi, de 9 h à 18 h."
+    },
+    {
+      "etape": "tokens",
+      "input_tokens": 1329,
+      "output_tokens": 150,
+      "total_tokens": 1479,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  ]
+}
