@@ -22,7 +22,8 @@ from agent.calendar_service import (
     verifier_disponibilite as verifier_disponibilite_calendar,
     lister_creneaux_libres as lister_creneaux_libres_calendar,
     creer_rendez_vous as creer_rendez_vous_calendar,
-    annuler_rendez_vous as annuler_rendez_vous_calendar
+    annuler_rendez_vous as annuler_rendez_vous_calendar,
+    lister_creneaux_tous_conseillers as lister_creneaux_tous_conseillers_calendar
 )
 
 mcp = FastMCP("sama-ker-catalogue", log_level="WARNING")
@@ -102,22 +103,32 @@ def verifier_disponibilite(
 
 @mcp.tool()
 def lister_creneaux_libres(
-    conseiller_id: int,
     debut_periode: str,
     fin_periode: str,
-    nombre: int = 3
+    nombre: int = 3,
+    conseiller_id: Optional[int] = None
 ) -> dict:
-    """Recherche les créneaux libres d'un conseiller sur une période.
+    """Recherche des créneaux de visite libres (45 min, lundi-samedi, 9 h-18 h) sur une période.
+
+    Sans conseiller_id, cherche dans les agendas des 3 conseillers et indique pour chaque
+    créneau le conseiller disponible (Moussa = 1, Fatou = 2, Ibrahima = 3).
 
     Args:
-        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
-        debut_periode: Début de la période au format ISO 8601 avec fuseau.
-        fin_periode: Fin de la période au format ISO 8601 avec fuseau.
+        debut_periode: Début de la période au format ISO 8601 avec fuseau, ex. 2026-11-26T15:00:00+00:00.
+        fin_periode: Fin de la période au format ISO 8601 avec fuseau, ex. 2026-11-26T18:00:00+00:00.
         nombre: Nombre maximum de créneaux à proposer (3 par défaut).
+        conseiller_id: Facultatif. Pour chercher dans l'agenda d'un seul conseiller (1, 2 ou 3).
     """
     try:
         debut_datetime = datetime.fromisoformat(debut_periode)
         fin_datetime = datetime.fromisoformat(fin_periode)
+
+        if conseiller_id is None:
+            return lister_creneaux_tous_conseillers_calendar(
+                debut_periode=debut_datetime,
+                fin_periode=fin_datetime,
+                nombre=nombre
+            )
 
         resultat = lister_creneaux_libres_calendar(
             conseiller_id=conseiller_id,

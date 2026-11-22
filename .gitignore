@@ -9,3 +9,4 @@ __pycache__/
 # Journaux des executions de l'agent
 traces/
 traces/email_*.json
+data/conversations.json
