@@ -298,7 +298,8 @@ def creer_rendez_vous(
         "end": {
             "dateTime": fin.isoformat(),
            "timeZone": str(TIMEZONE)
-        }
+        },
+        "location": adresse
     }
 
     # Enregistrer le rendez-vous dans Google Calendar
@@ -348,4 +349,97 @@ def annuler_rendez_vous(conseiller_id: int, event_id: str) -> dict:
     return {
         "event_id": event_id,
         "message": "Rendez-vous annulé avec succès."
+    }
+
+
+# ---------------------------------------------------------------------------
+# Compléments de l'exercice 3 : recherche sur les 3 conseillers et déplacement
+# ---------------------------------------------------------------------------
+
+CONSEILLERS = {1: "Moussa", 2: "Fatou", 3: "Ibrahima"}
+
+
+def lister_creneaux_tous_conseillers(
+    debut_periode: datetime,
+    fin_periode: datetime,
+    nombre: int = 3
+) -> dict:
+    """Cherche les créneaux libres dans les agendas des 3 conseillers.
+
+    Renvoie les `nombre` premiers créneaux, à des heures différentes, chacun avec
+    le conseiller disponible à cette heure-là.
+    """
+    candidats = []
+    for conseiller_id, prenom in CONSEILLERS.items():
+        resultat = lister_creneaux_libres(conseiller_id, debut_periode, fin_periode, nombre)
+        for creneau in resultat["creneaux"]:
+            candidats.append({**creneau, "conseiller_id": conseiller_id, "conseiller": prenom})
+
+    # Tri chronologique, puis une seule proposition par heure de début
+    candidats.sort(key=lambda c: (c["debut"], c["conseiller_id"]))
+    creneaux, heures_vues = [], set()
+    for creneau in candidats:
+        if creneau["debut"] not in heures_vues:
+            heures_vues.add(creneau["debut"])
+            creneaux.append(creneau)
+        if len(creneaux) >= nombre:
+            break
+
+    return {
+        "nombre": len(creneaux),
+        "creneaux": creneaux,
+        "message": (
+            "Créneaux disponibles trouvés."
+            if creneaux
+            else "Aucun créneau disponible sur cette période."
+        )
+    }
+
+
+def deplacer_rendez_vous(conseiller_id: int, event_id: str, nouveau_debut: datetime) -> dict:
+    """Déplace une visite existante vers un nouveau créneau de 45 minutes, s'il est libre."""
+    if nouveau_debut.tzinfo is None:
+        raise ValueError("La date de début doit contenir un fuseau horaire.")
+
+    nouveau_debut = nouveau_debut.astimezone(TIMEZONE)
+    nouvelle_fin = nouveau_debut + timedelta(minutes=DUREE_VISITE)
+
+    # Règles de l'agence (jour, horaires, pas dans le passé) : réutilise verifier_disponibilite
+    verifier_disponibilite(conseiller_id, nouveau_debut, nouvelle_fin)
+
+    calendar = get_calendar_service()
+    calendar_id = get_calendar_id(conseiller_id)
+
+    # Le créneau doit être libre, en ignorant la visite elle-même (si on la décale de 15 min)
+    evenements = calendar.events().list(
+        calendarId=calendar_id,
+        timeMin=nouveau_debut.isoformat(),
+        timeMax=nouvelle_fin.isoformat(),
+        singleEvents=True
+    ).execute()
+    autres = [e for e in evenements.get("items", []) if e.get("id") != event_id]
+    if autres:
+        raise ValueError("Ce créneau est déjà occupé.")
+
+    try:
+        resultat = calendar.events().patch(
+            calendarId=calendar_id,
+            eventId=event_id,
+            body={
+                "start": {"dateTime": nouveau_debut.isoformat(), "timeZone": str(TIMEZONE)},
+                "end": {"dateTime": nouvelle_fin.isoformat(), "timeZone": str(TIMEZONE)},
+            }
+        ).execute()
+    except HttpError as erreur:
+        if erreur.resp.status == 404:
+            raise ValueError(
+                "Ce rendez-vous n'existe pas dans l'agenda du conseiller."
+            ) from erreur
+        raise
+
+    return {
+        "id": resultat["id"],
+        "debut": nouveau_debut.isoformat(),
+        "fin": nouvelle_fin.isoformat(),
+        "message": "Rendez-vous déplacé avec succès."
     }
