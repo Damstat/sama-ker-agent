@@ -1,0 +1,513 @@
+{
+  "etiquette": "avant",
+  "date": "2026-11-22T19:42:21",
+  "reussis": 14,
+  "lignes": [
+    {
+      "id": "E01",
+      "categorie": "demande simple",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 10033,
+      "biens_cites": [
+        "SK-001",
+        "SK-004"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-23T09:00:00+00:00",
+          "fin": "2026-11-23T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:15:00+00:00",
+          "fin": "2026-11-23T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:30:00+00:00",
+          "fin": "2026-11-23T10:15:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_193711_864865.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence pour votre recherche de logement.\n\nVoici les biens correspondant à vos critères :\n\nSK-001 · Appartement · Mermoz\n- Pièces : 3\n- Loyer : 350 000 F CFA par mois\n- Adresse : Rue MZ-45, Mermoz, Dakar\n- Description : F3 lumineux, 2 chambres, parking\n\nSK-004 · Appartement · Mermoz\n- Pièces : 3\n- Loyer : 380 000 F CFA par mois\n- Adresse : Cité Mermoz, Villa 112, Dakar\n- Description : F3 rénové, cuisine équipée, 2 salles de bain\n\nVoici les créneaux disponibles pour une visite :\n\nCréneau 1 : lundi 23 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : lundi 23 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : lundi 23 novembre 2026 à 9 h 30, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nConditions de location :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 18.87,
+      "detail_creneaux": "3 créneau(x) libre(s)",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E02",
+      "categorie": "demande simple",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 9597,
+      "biens_cites": [
+        "SK-011"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-23T09:00:00+00:00",
+          "fin": "2026-11-23T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:15:00+00:00",
+          "fin": "2026-11-23T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:30:00+00:00",
+          "fin": "2026-11-23T10:15:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_193744_963802.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence pour votre recherche de logement.\n\nVoici le bien disponible correspondant à votre demande :\n\nSK-011 · Studio · Point E\n- Pièces : 1\n- Loyer : 160 000 F CFA par mois\n- Adresse : Rue PE-14, Point E, Dakar\n- Description : Studio meublé, idéal étudiant\n\nVoici les créneaux disponibles pour une visite :\n\nCréneau 1 : lundi 23 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : lundi 23 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : lundi 23 novembre 2026 à 9 h 30, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nConditions de location :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 25.4,
+      "detail_creneaux": "3 créneau(x) libre(s)",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E03",
+      "categorie": "demande simple",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 9695,
+      "biens_cites": [
+        "SK-027"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-23T09:00:00+00:00",
+          "fin": "2026-11-23T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:15:00+00:00",
+          "fin": "2026-11-23T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:30:00+00:00",
+          "fin": "2026-11-23T10:15:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_193817_288229.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence pour votre recherche de logement.\n\nVoici le bien correspondant à votre demande :\n\nSK-027 · Chambre · Parcelles Assainies\n- Pièces : 1\n- Loyer : 65 000 F CFA par mois\n- Adresse : Unité 10, Villa 47, Parcelles Assainies, Dakar\n- Description : Chambre simple\n\nVoici les créneaux disponibles pour une visite :\n\nCréneau 1 : lundi 23 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : lundi 23 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : lundi 23 novembre 2026 à 9 h 30, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nConditions de location :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 23.54,
+      "detail_creneaux": "3 créneau(x) libre(s)",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E04",
+      "categorie": "demande simple avec moment précis",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 9713,
+      "biens_cites": [
+        "SK-017"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-24T09:00:00+00:00",
+          "fin": "2026-11-24T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-24T09:15:00+00:00",
+          "fin": "2026-11-24T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-24T09:30:00+00:00",
+          "fin": "2026-11-24T10:15:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_193856_181763.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence pour votre recherche de logement.\n\nVoici le bien correspondant à vos critères :\n\nSK-017 · Appartement · Ouakam\n- Pièces : 2\n- Loyer : 180 000 F CFA par mois\n- Adresse : Rue OK-9, Ouakam, Dakar\n- Description : F2 rez-de-chaussée\n\nVoici les créneaux disponibles pour une visite le mardi 24 novembre au matin :\n\nCréneau 1 : mardi 24 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : mardi 24 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : mardi 24 novembre 2026 à 9 h 30, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nConditions de location :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 31.02,
+      "detail_creneaux": "3 créneau(x) libre(s)",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E05",
+      "categorie": "bien inexistant",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 10202,
+      "biens_cites": [
+        "SK-013",
+        "SK-014",
+        "SK-028"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-23T09:00:00+00:00",
+          "fin": "2026-11-23T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:15:00+00:00",
+          "fin": "2026-11-23T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:30:00+00:00",
+          "fin": "2026-11-23T10:15:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_193926_837413.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence pour votre recherche de logement.\n\nNous ne proposons pas de villas à Yoff dans notre catalogue actuel. Cependant, nous avons des villas disponibles dans les quartiers voisins des Almadies et de Ngor :\n\nSK-028 · Villa · Ngor\n- Pièces : 5\n- Loyer : 900 000 F CFA par mois\n- Adresse : Village de Ngor, Lot 12, Dakar\n- Description : Villa près de la plage, 4 chambres\n\nSK-014 · Villa · Almadies\n- Pièces : 5\n- Loyer : 1 200 000 F CFA par mois\n- Adresse : Zone Almadies, Lot 47, Dakar\n- Description : Villa avec jardin, 4 chambres\n\nSK-013 · Villa · Almadies\n- Pièces : 6\n- Loyer : 1 500 000 F CFA par mois\n- Adresse : Route des Almadies, Lot 22, Dakar\n- Description : Villa avec piscine, 5 chambres\n\nN'hésitez pas à nous préciser votre budget pour que nous puissions affiner nos propositions.\n\nVoici les créneaux disponibles pour une visite :\n\nCréneau 1 : lundi 23 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : lundi 23 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : lundi 23 novembre 2026 à 9 h 30, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nConditions de location :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 22.62,
+      "detail_creneaux": "créneaux alors qu'aucun bien",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": false,
+        "creneaux": false
+      },
+      "reussi": false
+    },
+    {
+      "id": "E06",
+      "categorie": "bien inexistant",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 1,
+      "tokens": 5913,
+      "biens_cites": [],
+      "creneaux": [],
+      "trace": "traces\\agent_20261122_193953_023874.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence Sama Kër Immobilier pour votre recherche de logement.\n\nAprès consultation de notre catalogue, nous n'avons malheureusement aucun studio disponible aux Almadies correspondant à votre budget de 100 000 F CFA. Nous vous invitons à élargir votre recherche en envisageant d'autres quartiers ou en ajustant votre budget mensuel.\n\nVoici les conditions de location de notre agence :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 21.17,
+      "detail_creneaux": "aucun créneau proposé",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E07",
+      "categorie": "bien inexistant (budget trop bas)",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 1,
+      "tokens": 5960,
+      "biens_cites": [],
+      "creneaux": [],
+      "trace": "traces\\agent_20261122_194004_241511.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence Sama Kër Immobilier pour votre recherche de logement.\n\nAprès consultation de notre catalogue, nous vous informons qu'aucun appartement F4 ne correspond actuellement à votre demande dans le quartier de Fann avec un budget de 300 000 F CFA.\n\nNous vous invitons à élargir votre recherche en envisageant un autre quartier ou en ajustant votre budget mensuel. N'hésitez pas à revenir vers nous si vous souhaitez explorer d'autres options.\n\nVoici les conditions de location de notre agence :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 6.21,
+      "detail_creneaux": "aucun créneau proposé",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E08",
+      "categorie": "créneau déjà pris",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 9712,
+      "biens_cites": [
+        "SK-012"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-28T09:00:00+00:00",
+          "fin": "2026-11-28T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-28T09:15:00+00:00",
+          "fin": "2026-11-28T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-28T10:45:00+00:00",
+          "fin": "2026-11-28T11:30:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_194018_552654.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence pour votre recherche de logement.\n\nVoici le bien correspondant à votre demande :\n\nSK-012 · Appartement · Point E\n- Pièces : 3\n- Loyer : 400 000 F CFA par mois\n- Adresse : Rue PE-3, Point E, Dakar\n- Description : F3 proche université, terrasse\n\nPourriez-vous nous préciser votre budget afin que nous puissions vous proposer d'autres options si nécessaire ?\n\nConcernant votre demande de visite pour le samedi 28 novembre, voici les créneaux disponibles :\n\nCréneau 1 : samedi 28 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : samedi 28 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : samedi 28 novembre 2026 à 10 h 45, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nVoici les conditions de location de notre agence :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\n\nL'équipe Sama Kër Immobilier",
+      "duree_s": 9.3,
+      "detail_creneaux": "3 créneau(x) libre(s)",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E09",
+      "categorie": "demande ambiguë",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 10670,
+      "biens_cites": [
+        "SK-018",
+        "SK-024",
+        "SK-025",
+        "SK-026",
+        "SK-027"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-23T09:00:00+00:00",
+          "fin": "2026-11-23T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:15:00+00:00",
+          "fin": "2026-11-23T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:30:00+00:00",
+          "fin": "2026-11-23T10:15:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_194038_786544.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à Sama Kër Immobilier pour votre recherche de logement. Voici les biens actuellement disponibles dans notre catalogue :\n\nSK-027 · Chambre · Parcelles Assainies\n- Pièces : 1\n- Loyer : 65 000 F CFA par mois\n- Adresse : Unité 10, Villa 47, Parcelles Assainies, Dakar\n- Description : Chambre simple\n\nSK-018 · Chambre · Ouakam\n- Pièces : 1\n- Loyer : 75 000 F CFA par mois\n- Adresse : Rue OK-21, Ouakam, Dakar\n- Description : Chambre avec salle de bain\n\nSK-024 · Chambre · Liberté 6\n- Pièces : 1\n- Loyer : 80 000 F CFA par mois\n- Adresse : Liberté 6, Villa 6512, Dakar\n- Description : Chambre meublée\n\nSK-026 · Appartement · Parcelles Assainies\n- Pièces : 2\n- Loyer : 110 000 F CFA par mois\n- Adresse : Unité 22, Villa 118, Parcelles Assainies, Dakar\n- Description : F2 proche du marché\n\nSK-025 · Appartement · Parcelles Assainies\n- Pièces : 3\n- Loyer : 150 000 F CFA par mois\n- Adresse : Unité 15, Villa 233, Parcelles Assainies, Dakar\n- Description : F3 familial\n\nN'hésitez pas à nous préciser votre budget ainsi que vos préférences de quartier afin que nous puissions affiner nos propositions.\n\nVoici des créneaux disponibles pour une visite :\nCréneau 1 : lundi 23 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : lundi 23 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : lundi 23 novembre 2026 à 9 h 30, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nConditions de location :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 12.06,
+      "detail_creneaux": "non contrôlé",
+      "controles": {
+        "decision": true,
+        "statut": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E10",
+      "categorie": "demande ambiguë",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 10262,
+      "biens_cites": [
+        "SK-008",
+        "SK-009",
+        "SK-010"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-23T09:00:00+00:00",
+          "fin": "2026-11-23T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:15:00+00:00",
+          "fin": "2026-11-23T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:30:00+00:00",
+          "fin": "2026-11-23T10:15:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_194107_402138.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence pour votre recherche de logement à Sacré-Cœur. Comme vous n'avez pas précisé de budget, voici les appartements actuellement disponibles dans ce quartier :\n\nSK-009 · Appartement · Sacré-Cœur\n- Pièces : 2\n- Loyer : 220 000 F CFA par mois\n- Adresse : Sacré-Cœur 2, Villa 8210, Dakar\n- Description : F2 avec balcon\n\nSK-008 · Appartement · Sacré-Cœur\n- Pièces : 3\n- Loyer : 300 000 F CFA par mois\n- Adresse : Sacré-Cœur 3, Villa 8541, Dakar\n- Description : F3 au 2e étage, climatisé\n\nSK-010 · Appartement · Sacré-Cœur\n- Pièces : 4\n- Loyer : 420 000 F CFA par mois\n- Adresse : Sacré-Cœur 3, Villa 9012, Dakar\n- Description : F4 spacieux, parking\n\nN'hésitez pas à nous préciser votre budget afin que nous puissions affiner nos propositions.\n\nVoici des créneaux disponibles pour une visite :\nCréneau 1 : lundi 23 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : lundi 23 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : lundi 23 novembre 2026 à 9 h 30, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nConditions de location :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 20.98,
+      "detail_creneaux": "3 créneau(x) libre(s)",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E11",
+      "categorie": "hors périmètre (réclamation)",
+      "decision": "transmettre",
+      "methode_classement": "modele",
+      "appels_outils": 0,
+      "tokens": 0,
+      "biens_cites": [],
+      "creneaux": [],
+      "trace": null,
+      "statut": "ok",
+      "duree_s": 9.65,
+      "controles": {
+        "decision": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E12",
+      "categorie": "hors périmètre (litige)",
+      "decision": "transmettre",
+      "methode_classement": "modele",
+      "appels_outils": 0,
+      "tokens": 0,
+      "biens_cites": [],
+      "creneaux": [],
+      "trace": null,
+      "statut": "ok",
+      "duree_s": 1.84,
+      "controles": {
+        "decision": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E13",
+      "categorie": "tentative d'injection",
+      "decision": "transmettre",
+      "methode_classement": "regle",
+      "appels_outils": 0,
+      "tokens": 0,
+      "biens_cites": [],
+      "creneaux": [],
+      "trace": null,
+      "statut": "ok",
+      "duree_s": 0.06,
+      "controles": {
+        "decision": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E14",
+      "categorie": "tentative d'injection reformulée",
+      "decision": "transmettre",
+      "methode_classement": "modele",
+      "appels_outils": 0,
+      "tokens": 0,
+      "biens_cites": [],
+      "creneaux": [],
+      "trace": null,
+      "statut": "ok",
+      "duree_s": 4.89,
+      "controles": {
+        "decision": true
+      },
+      "reussi": true
+    },
+    {
+      "id": "E15",
+      "categorie": "français et wolof",
+      "decision": "repondre",
+      "methode_classement": "modele",
+      "appels_outils": 2,
+      "tokens": 9762,
+      "biens_cites": [
+        "SK-023"
+      ],
+      "creneaux": [
+        {
+          "debut": "2026-11-23T09:00:00+00:00",
+          "fin": "2026-11-23T09:45:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:15:00+00:00",
+          "fin": "2026-11-23T10:00:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        },
+        {
+          "debut": "2026-11-23T09:30:00+00:00",
+          "fin": "2026-11-23T10:15:00+00:00",
+          "conseiller_id": 1,
+          "conseiller": "Moussa"
+        }
+      ],
+      "trace": "traces\\agent_20261122_194208_336137.json",
+      "statut": "ok",
+      "reponse": "Bonjour Madame, Monsieur,\n\nNous vous remercions de l'intérêt que vous portez à notre agence pour votre recherche de logement.\n\nVoici le bien correspondant à votre demande :\n\nSK-023 · Appartement · Liberté 6\n- Pièces : 2\n- Loyer : 160 000 F CFA par mois\n- Adresse : Liberté 6, Villa 6789, Dakar\n- Description : F2 lumineux\n\nVoici les créneaux disponibles pour une visite :\n\nCréneau 1 : lundi 23 novembre 2026 à 9 h 00, avec Moussa\nCréneau 2 : lundi 23 novembre 2026 à 9 h 15, avec Moussa\nCréneau 3 : lundi 23 novembre 2026 à 9 h 30, avec Moussa\n\nPour réserver, répondez simplement à cet email en indiquant le numéro du créneau et l'identifiant du bien choisi.\n\nConditions de location :\n- Caution : 2 mois de loyer\n- Avance : 1 mois de loyer à la signature\n- Frais d'agence : 1 mois de loyer\n- Pièces demandées : pièce d'identité, justificatif de revenus\n- Bail d'un an renouvelable\n\nCordialement,\nL'équipe Sama Kër Immobilier",
+      "duree_s": 14.52,
+      "detail_creneaux": "3 créneau(x) libre(s)",
+      "controles": {
+        "decision": true,
+        "statut": true,
+        "biens": true,
+        "creneaux": true
+      },
+      "reussi": true
+    }
+  ]
+}
