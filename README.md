@@ -18,16 +18,25 @@ Projet réalisé dans le cadre du programme Data & IA — Orange Digital Center.
 ## Architecture
 
 ```
-            Email client
-                 │
-                 ▼
-┌──────────────────────────────────┐   MCP (stdio ou HTTP)
-│ Agent (LangGraph + Gemini)       │──► Serveur MCP catalogue (SQLite)
-│ boucle, état, étapes limitées    │──► Google Calendar (créneaux, visites)
-└──────────────────────────────────┘──► Gmail (lecture, brouillons, envoi)
-        │                    │
-        ▼                    ▼
-  Traces / journal   Validation par un conseiller
+              Email client (Gmail du compte de test)
+                       │
+                       ▼
+        agent/traiter_emails.py  (pipeline, état par fil Gmail)
+           │            │                         │
+           ▼            ▼                         ▼
+     classifieur   Agent LangGraph + Gemini   Validation du conseiller (o/n)
+    (règle + IA)   OUTILS EN LECTURE SEULE          │
+                         │ MCP (stdio ou HTTP)      ▼  écritures faites par le CODE
+                         ▼                     ┌──────────────────────────────┐
+            Serveur MCP sama-ker-catalogue     │ Gmail : brouillon, envoi,    │
+            - rechercher_biens, detail_bien    │         libellés             │
+              (SQLite, 30 biens)               │ Agenda : créer, déplacer,    │
+            - lister_creneaux_libres,          │          annuler une visite  │
+              verifier_disponibilite           └──────────────────────────────┘
+              (Google Calendar, 3 agendas)
+                         │
+                         ▼
+               Traces JSON (traces/) et journaux par email
 ```
 
 | Brique | Choix |
@@ -36,7 +45,7 @@ Projet réalisé dans le cadre du programme Data & IA — Orange Digital Center.
 | Framework d'agent | LangGraph |
 | Catalogue | SQLite (30 biens fictifs) exposé par un serveur MCP (FastMCP) |
 | Agenda / Messagerie | API Google Calendar / API Gmail, sur un compte de test |
-| Validation humaine | Gradio ou ligne de commande |
+| Validation humaine | Ligne de commande : le conseiller tape `o` pour autoriser, toute autre réponse refuse |
 
 **Choix du modèle.** `gemini-2.5-flash` n'est plus ouvert aux nouveaux comptes, `gemini-3.8-flash`
 dépassait le délai de réponse et `gemini-3.5-flash` est limité à 20 requêtes par jour sur le
@@ -48,18 +57,29 @@ avec un quota suffisant pour l'évaluation.
 ```
 sama-ker-agent/
 ├── agent/
-│   ├── agent.py            # boucle LangGraph, client MCP, traces
-│   └── google_auth.py      # connexion OAuth au compte Google de test
+│   ├── agent.py            # boucle LangGraph, client MCP (outils en lecture seule), date du jour, traces
+│   ├── google_auth.py      # connexion OAuth au compte Google de test
+│   ├── calendar_service.py # Google Calendar : créneaux libres (3 conseillers), créer, déplacer, annuler
+│   ├── visites.py          # écritures dans l'agenda après accord du conseiller
+│   ├── gmail_tools.py      # Gmail : libellés, lecture, brouillon dans le fil, validation, envoi
+│   ├── classifieur.py      # visite ou hors périmètre (règle anti-injection + Gemini)
+│   └── traiter_emails.py   # pipeline complet : de l'email reçu à la visite inscrite
 ├── mcp_server/
-│   ├── server.py           # serveur MCP : outils + ressource
+│   ├── server.py           # serveur MCP : outils catalogue + agenda, ressource agence://infos
 │   ├── catalogue.py        # requêtes SQLite du catalogue
 │   └── exemple_client.py   # client de démonstration
 ├── data/
 │   └── create_catalogue.py # création de la base (30 biens)
 ├── eval/
-│   ├── demandes_ex1.json   # 10 demandes de test et résultats attendus
-│   └── evaluer_ex1.py      # rejoue les demandes et calcule le taux de réussite
-├── traces/                 # traces JSON des traitements
+│   ├── demandes_ex1.json, evaluer_ex1.py      # exercices 1 et 2
+│   ├── essai_*_ex4.py, essai_agenda_ex3.py    # essais des exercices 3 et 4
+│   ├── verifier_outils_agent.py               # prouve que le modèle n'a que des outils de lecture
+│   ├── emails_test_ex6.json                   # 15 emails de test et résultats attendus
+│   ├── evaluer_ex6.py                         # évaluation en une commande (exercice 6)
+│   ├── resultats/                             # tableaux avant / après
+│   ├── analyse_echecs_ex6.md                  # analyse de trois échecs
+│   └── traces_livrables/                      # traces commentées (emails fictifs)
+├── traces/                 # traces JSON des exécutions (ignorées par Git : données de clients)
 ├── .env.example            # modèle de configuration (sans secrets)
 ├── requirements.txt
 └── README.md
@@ -353,6 +373,111 @@ classification (agent/classifieur.py)
 
 Aucun envoi sans validation.
 
+## Agenda des conseillers (exercice 3)
+
+Trois agendas Google (un par conseiller : Moussa = 1, Fatou = 2, Ibrahima = 3) dans le compte de test.
+Règles de l'agence appliquées par `agent/calendar_service.py` : visites de 45 minutes, du lundi au
+samedi de 9 h à 18 h, fuseau `Africa/Dakar`, aucun créneau dans le passé, adresse du bien dans le
+champ « Lieu » de l'événement.
+
+| Action | Fonction | Qui la déclenche |
+|---|---|---|
+| Lister les créneaux libres (3 agendas) | `lister_creneaux_libres` (outil MCP) | Le modèle (lecture) |
+| Vérifier une disponibilité | `verifier_disponibilite` (outil MCP) | Le modèle (lecture) |
+| Créer une visite | `visites.planifier_visite` | Le code, après « o » du conseiller |
+| Déplacer une visite | `visites.deplacer_visite` | Le code, après « o » du conseiller |
+| Annuler une visite | `visites.annuler_visite` | Le code, après « o » du conseiller |
+
+**Le modèle n'a que des outils de lecture** (`OUTILS_LECTURE` dans `agent/agent.py`) : il propose,
+le code exécute après accord. Vérification en une commande :
+
+```bash
+python -m eval.verifier_outils_agent
+# Outils donnés au modèle : ['detail_bien', 'lister_creneaux_libres', 'rechercher_biens', 'verifier_disponibilite']
+```
+
+**Date du jour.** Le prompt système contient la date, l'heure et le calendrier des 14 prochains jours,
+pour que « jeudi prochain » soit juste. Choix de l'équipe : « matin » = 9 h-12 h, « après-midi » =
+14 h-18 h, « fin d'après-midi » = 15 h-18 h, « jeudi prochain » = le premier jeudi qui suit aujourd'hui.
+
+**Aucun doublon.** La disponibilité est revérifiée juste avant chaque création ou déplacement.
+
+Démonstration du critère (3 créneaux libres, création, refus du doublon, déplacement, annulation) :
+
+```bash
+python -m eval.essai_agenda_ex3
+```
+
+### Outil MCP `lister_creneaux_libres`
+
+| Argument | Type | Description |
+|---|---|---|
+| `debut_periode` | string | Début de la période, ISO 8601 avec fuseau, ex. `2026-11-26T15:00:00+00:00` |
+| `fin_periode` | string | Fin de la période, ex. `2026-11-26T18:00:00+00:00` |
+| `nombre` | integer | Nombre maximum de créneaux (3 par défaut) |
+| `conseiller_id` | integer | Facultatif. Sans lui, recherche dans les 3 agendas |
+
+```json
+{"nombre": 3, "creneaux": [
+  {"debut": "2026-11-26T16:30:00+00:00", "fin": "2026-11-26T17:15:00+00:00", "conseiller_id": 1, "conseiller": "Moussa"}
+]}
+```
+
+## Pipeline complet (exercice 5)
+
+```bash
+python -m agent.traiter_emails --boucle     # surveille la boîte toutes les 30 s (Ctrl+C pour arrêter)
+```
+
+1. **Premier email du client** : classification, puis rédaction par l'agent (biens du catalogue et
+   3 créneaux réellement libres), brouillon dans le fil Gmail → **validation 1** du conseiller → envoi.
+2. **Réponse du client** dans le même fil (« je prends le créneau 2 ») : Gemini rapproche la réponse
+   des créneaux réellement proposés (sortie structurée) → **validation 2** → visite créée dans l'agenda
+   du bon conseiller et email de confirmation envoyé.
+
+L'état de chaque conversation est conservé par fil Gmail (`thread_id`) dans `data/conversations.json`
+(fichier ignoré par Git). Les biens et créneaux mémorisés sont relus dans la trace des outils, jamais
+dans le texte du modèle.
+
+| Sortie de route | Comportement |
+|---|---|
+| Outil en erreur (API, quota) | Aucun brouillon ; l'email reste « À traiter » et sera repris |
+| Créneau pris entre-temps | Création refusée par l'agenda ; de nouveaux créneaux sont proposés au client |
+| Demande incomplète | L'agent demande les précisions (budget…) ; si le choix du client n'est pas clair, on redemande le numéro du créneau |
+| Hors périmètre ou injection | Transmis à un conseiller, y compris dans une réponse du client |
+
+## Mesure et fiabilisation (exercice 6)
+
+Jeu de 15 emails (`eval/emails_test_ex6.json`) : demandes simples, biens inexistants, créneau déjà
+pris, demandes ambiguës, hors périmètre, injections, message en français et en wolof. Les biens
+attendus ont été calculés dans la base. Le script ne crée aucun brouillon et n'envoie rien.
+
+```bash
+python -m eval.evaluer_ex6 --etiquette apres
+```
+
+Il mesure pour chaque email la réussite, les appels d'outils, les tokens et la durée, revérifie dans
+Google Agenda que chaque créneau proposé est réellement libre et produit `eval/resultats/ex6_apres.md`
+et le tableau `eval/resultats/ex6_avant_apres.md`. Pour le scénario « créneau déjà pris », le banc de
+test occupe le samedi suivant à 10 h chez les 3 conseillers puis libère ce créneau à la fin.
+
+| Passage | Réussite | Appels d'outils | Tokens | Durée moyenne |
+|---|---|---|---|---|
+| Avant correction | 14/15 | 20 | 101 519 | 14,8 s |
+| Après correction | 14/15 | 20 | 103 082 | 8,7 s |
+
+Analyse de trois échecs et de la régression observée : `eval/analyse_echecs_ex6.md`.
+Correction appliquée : E05 (le modèle retirait le quartier demandé). Régression observée : E07
+(le modèle retirait le budget) ; même cause racine, piste de correction documentée.
+
+## Démonstration devant le jury
+
+```bash
+python agent/google_auth.py                 # jeton neuf (expire après 7 jours en mode Test)
+python data/create_catalogue.py
+python -m agent.traiter_emails --boucle     # puis : email du jury, o, réponse du client, o
+```
+
 ## Évaluation
 
 | Exercice | Commande | Résultat |
@@ -360,8 +485,8 @@ Aucun envoi sans validation.
 | 1 (outils locaux dans l'agent) | `python -m eval.evaluer_ex1` (version de l'exercice 1) | 10/10 |
 | 2 (serveur MCP, stdio) | `python -m eval.evaluer_ex1` | 10/10 |
 | 2 (serveur MCP, HTTP) | `$env:MCP_TRANSPORT="http"; python -m eval.evaluer_ex1` | 10/10 |
-
-> Section complétée à l'exercice 6 : tableau de résultats avant / après correction.
+| 4 (classification) | `python -m eval.essai_classification_ex4` | 5/5 |
+| 6 (15 emails, avant / après) | `python -m eval.evaluer_ex6 --etiquette apres` | 14/15 → 14/15 |
 
 ## Sécurité
 
@@ -369,6 +494,8 @@ Aucun envoi sans validation.
 - Seul un compte Google de test est connecté à l'agent.
 - Les requêtes SQL du serveur MCP sont paramétrées (pas d'injection SQL possible).
 - Le contenu des emails est traité comme une donnée : aucune instruction lue dans un message ne modifie le comportement de l'agent.
+- Moindre privilège : le modèle ne reçoit que des outils de lecture ; envoi d'email et écritures dans l'agenda sont faits par le code, après validation du conseiller.
+- Les traces d'exécution (`traces/`) et l'état des conversations (`data/conversations.json`) contiennent des emails de clients : ils sont exclus du dépôt. Seules des traces d'emails fictifs sont livrées dans `eval/traces_livrables/`.
 
 ## Règles de travail
 
