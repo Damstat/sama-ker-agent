@@ -169,8 +169,12 @@ python -m agent.agent "Je cherche un studio au Point E"
 
 ## Serveur MCP du catalogue
 
-Serveur `sama-ker-catalogue`, écrit avec FastMCP (SDK MCP Python). Il expose deux outils et
-une ressource. L'agent n'accède jamais directement à la base : il passe par ce serveur.
+Serveur `sama-ker-catalogue`, écrit avec FastMCP (SDK MCP Python). Il expose quatre outils, tous
+en **lecture seule** (`rechercher_biens`, `detail_bien`, `lister_creneaux_libres`,
+`verifier_disponibilite`), et une ressource. L'agent n'accède jamais directement à la base : il
+passe par ce serveur. Aucun outil d'écriture dans l'agenda n'est exposé : un client MCP, quel qu'il
+soit, ne peut ni créer ni annuler une visite. Les écritures sont faites par le code de l'agent,
+après la validation d'un conseiller.
 
 ### Démarrer le serveur
 

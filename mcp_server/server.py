@@ -1,9 +1,11 @@
 """Serveur MCP du catalogue Sama Kër Immobilier.
 
-Expose :
-  - outil    rechercher_biens : recherche de biens disponibles par critères
-  - outil    detail_bien      : fiche complète d'un bien
-  - ressource agence://infos  : horaires de visite, zones couvertes, conditions de location
+Expose (lecture seule) :
+  - outil    rechercher_biens       : recherche de biens disponibles par critères
+  - outil    detail_bien            : fiche complète d'un bien
+  - outil    lister_creneaux_libres : créneaux de visite libres dans les agendas des conseillers
+  - outil    verifier_disponibilite : disponibilité d'un conseiller sur un créneau
+  - ressource agence://infos        : horaires de visite, zones couvertes, conditions de location
 
 Lancement :
   python -m mcp_server.server                    # transport stdio (local)
@@ -21,8 +23,6 @@ from mcp_server import catalogue
 from agent.calendar_service import (
     verifier_disponibilite as verifier_disponibilite_calendar,
     lister_creneaux_libres as lister_creneaux_libres_calendar,
-    creer_rendez_vous as creer_rendez_vous_calendar,
-    annuler_rendez_vous as annuler_rendez_vous_calendar,
     lister_creneaux_tous_conseillers as lister_creneaux_tous_conseillers_calendar
 )
 
@@ -142,61 +142,12 @@ def lister_creneaux_libres(
     except ValueError as erreur:
         return {"erreur": str(erreur)}
 
-@mcp.tool()
-def annuler_rendez_vous(
-    conseiller_id: int,
-    event_id: str
-) -> dict:
-    """Annule un rendez-vous dans Google Calendar.
 
-    Args:
-        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
-        event_id: Identifiant Google Calendar du rendez-vous à annuler.
-    """
-    try:
-        resultat = annuler_rendez_vous_calendar(
-            conseiller_id=conseiller_id,
-            event_id=event_id
-        )
+# Aucun outil d'écriture (créer, déplacer, annuler une visite) n'est exposé par ce serveur :
+# un client MCP quelconque pourrait sinon modifier l'agenda sans l'accord d'un conseiller.
+# Les écritures sont faites par le code (agent/visites.py, agent/traiter_emails.py),
+# uniquement après la validation humaine.
 
-        return resultat
-
-    except ValueError as erreur:
-        return {"erreur": str(erreur)}
-
-
-@mcp.tool()
-def creer_rendez_vous(
-    conseiller_id: int,
-    nom_client: str,
-    telephone: str,
-    adresse: str,
-    debut: str
-) -> dict:
-    """Crée un rendez-vous de visite immobilière dans Google Calendar.
-
-    Args:
-        conseiller_id: Identifiant du conseiller (1, 2 ou 3).
-        nom_client: Nom complet du client.
-        telephone: Numéro de téléphone du client.
-        adresse: Adresse du bien immobilier à visiter.
-        debut: Date et heure de début au format ISO 8601 avec fuseau horaire.
-    """
-    try:
-        debut_datetime = datetime.fromisoformat(debut)
-
-        resultat = creer_rendez_vous_calendar(
-            conseiller_id=conseiller_id,
-            nom_client=nom_client,
-            telephone=telephone,
-            adresse=adresse,
-            debut=debut_datetime
-        )
-
-        return resultat
-
-    except ValueError as erreur:
-        return {"erreur": str(erreur)}
 
 def _quartiers_couverts() -> str:
     try:
